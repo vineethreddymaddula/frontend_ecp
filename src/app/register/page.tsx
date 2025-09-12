@@ -1,0 +1,31 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAppStore } from '@/store';
+import AuthForm from '@/components/AuthForm';
+
+export default function RegisterPage() {
+  const router = useRouter();
+  const { registerUser, user, authLoading, authError } = useAppStore();
+
+  const handleRegister = async (formData: any) => {
+    await registerUser(formData.name, formData.email, formData.password);
+  };
+  
+  // Redirect if user is already logged in after registration
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
+
+  return (
+    <AuthForm
+      formType="register"
+      onSubmit={handleRegister}
+      isLoading={authLoading}
+      error={authError}
+    />
+  );
+}
