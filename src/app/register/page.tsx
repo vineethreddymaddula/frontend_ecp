@@ -21,11 +21,13 @@ export default function RegisterPage() {
   }, [user, router]);
 
   return (
-    <AuthForm
-      formType="register"
-      onSubmit={handleRegister}
-      isLoading={authLoading}
-      error={authError}
-    />
+    <div className="min-h-screen bg-secondary">
+      <AuthForm
+        formType="register"
+        onSubmit={handleRegister}
+        isLoading={authLoading}
+        error={authError}
+      />
+    </div>
   );
 }

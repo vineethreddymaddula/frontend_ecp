@@ -33,27 +33,21 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-secondary p-4">
-      <div className="w-full max-w-5xl flex flex-col lg:flex-row bg-white rounded-2xl shadow-xl overflow-hidden">
-        
+    <div className="flex items-center justify-center min-h-screen bg-secondary p-4">
+      <div className="w-full max-w-5xl flex flex-col lg:flex-row bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
         {/* Form Section */}
         <div className="w-full lg:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
           <div className="w-full max-w-md mx-auto">
-            <h2 className="text-3xl font-bold text-primary mb-2">{title}</h2>
-            <p className="text-gray-600 mb-8">{subtitle}</p>
-
-
-
-    
-            
+            <h2 className="text-4xl font-extrabold text-primary mb-2 tracking-tight leading-tight">{title}</h2>
+            <p className="text-gray-600 mb-8 text-lg">{subtitle}</p>
             <form className="space-y-6" onSubmit={handleSubmit}>
               {!isLogin && (
-                 <div className="relative">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
                   </div>
                   <input id="name" name="name" type="text" required value={formData.name} onChange={handleChange}
-                    className="w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent" placeholder="Full Name" />
+                    className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent text-lg" placeholder="Full Name" />
                 </div>
               )}
               <div className="relative">
@@ -61,7 +55,7 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
                 </div>
                 <input id="email-address" name="email" type="email" required value={formData.email} onChange={handleChange}
-                  className="w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent" placeholder="Email address" />
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent text-lg" placeholder="Email address" />
               </div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -70,11 +64,11 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
                 <input 
                   id="password" 
                   name="password" 
-                  type={showPassword ? 'text' : 'password'} // <-- Type changes based on state
+                  type={showPassword ? 'text' : 'password'}
                   required 
                   value={formData.password} 
                   onChange={handleChange}
-                  className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent" // <-- Added pr-10 for spacing
+                  className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-accent focus:border-accent text-lg" 
                   placeholder="Password" 
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -97,15 +91,14 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
               </div>
 
               
-              {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-
+              {error && <p className="text-base text-red-600 text-center font-semibold">{error}</p>}
               <button type="submit" disabled={isLoading}
-                className="w-full bg-blue-500 text-white font-bold py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-hover transition-all duration-300 disabled:bg-gray-400"
+                className="w-full bg-accent text-white font-bold py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-hover transition-all duration-300 disabled:bg-gray-400 text-lg shadow-md"
               >
                 {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
               </button>
             </form>
-            <div className="text-sm text-center mt-6">
+            <div className="text-base text-center mt-6">
               {isLogin ? (
                 <p className="text-gray-600">Don't have an account? <Link href="/register" className="font-semibold text-accent hover:underline">Register</Link></p>
               ) : (
@@ -116,10 +109,8 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
         </div>
 
         {/* Image Section */}
-        <div className="hidden lg:block w-1/2 bg-cover bg-center" style={{backgroundImage: "url('https://images.unsplash.com/photo-1579298245158-33e8f568f7d3?q=80&w=1790&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"}}>
-           
+        <div className="hidden lg:block lg:w-1/2 bg-cover bg-center" style={{backgroundImage: "url('https://images.unsplash.com/photo-1579298245158-33e8f568f7d3?q=80&w=1790&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"}}>
         </div>
-
       </div>
     </div>
   );

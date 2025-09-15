@@ -21,11 +21,13 @@ export default function LoginPage() {
   }, [user, router]);
 
   return (
-    <AuthForm
-      formType="login"
-      onSubmit={handleLogin}
-      isLoading={authLoading}
-      error={authError}
-    />
+    <div className="min-h-screen bg-secondary">
+      <AuthForm
+        formType="login"
+        onSubmit={handleLogin}
+        isLoading={authLoading}
+        error={authError}
+      />
+    </div>
   );
 }
