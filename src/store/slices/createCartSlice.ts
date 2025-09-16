@@ -7,6 +7,7 @@ export interface CartSlice {
   addToCart: (product: IProduct) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   removeFromCart: (productId: string) => void;
+    clearCart: () => void; // <-- Add this
 }
 
 export const createCartSlice: StateCreator<CartSlice> = (set, get) => ({
@@ -46,5 +47,8 @@ export const createCartSlice: StateCreator<CartSlice> = (set, get) => ({
     set((state) => ({
       items: state.items.filter((item) => item._id !== productId),
     }));
+  },
+   clearCart: () => {
+    set({ items: [] });
   },
 });

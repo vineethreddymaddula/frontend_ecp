@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { IProduct } from '@/interfaces/product.interface';
 import Link from 'next/link';
 import { useAppStore } from '@/store';
+import { HiShoppingCart } from 'react-icons/hi';
 
 interface ProductCardProps {
   product: IProduct;
@@ -29,7 +30,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           )}
           
           <img
-            src={product.images[0] || '/placeholder.png'}
+            src={product.images[0] || 'https://images.pexels.com/photos/6604246/pexels-photo-6604246.jpeg'}
             alt={product.name}
             className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-500 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
@@ -45,9 +46,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 className="bg-white text-primary-900 p-3 rounded-full shadow-lg hover:bg-accent hover:text-white transition-all duration-200 transform hover:scale-110"
                 title="Quick Add to Cart"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                </svg>
+                <HiShoppingCart className="w-5 h-5" />
               </button>
               <button
                 className="bg-white text-primary-900 p-3 rounded-full shadow-lg hover:bg-red-500 hover:text-white transition-all duration-200 transform hover:scale-110"

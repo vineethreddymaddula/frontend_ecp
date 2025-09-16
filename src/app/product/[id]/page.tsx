@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { useAppStore } from '@/store';
 import Toast from '@/components/Toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { HiShoppingCart } from 'react-icons/hi';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -165,9 +166,7 @@ export default function ProductDetailPage() {
                   disabled={selectedProduct.stock === 0}
                   className="flex-1 bg-gradient-to-r from-accent to-purple-600 text-white font-bold py-4 px-8 rounded-xl hover:shadow-premium transform hover:scale-105 transition-all duration-300 disabled:bg-primary-300 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-2"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                  </svg>
+                  <HiShoppingCart className="w-5 h-5" />
                   <span>{selectedProduct.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</span>
                 </button>
                 <button className="border-2 border-accent text-accent font-bold py-4 px-8 rounded-xl hover:bg-accent hover:text-white transition-all duration-300 flex items-center justify-center space-x-2">

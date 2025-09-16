@@ -2,6 +2,7 @@
 
 import { useAppStore } from '@/store';
 import Link from 'next/link';
+import { HiShoppingCart } from 'react-icons/hi';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart } = useAppStore();
@@ -18,9 +19,7 @@ export default function CartPage() {
         <div className="container mx-auto px-6 py-20">
           <div className="text-center animate-fade-in">
             <div className="w-32 h-32 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-8">
-              <svg className="w-16 h-16 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-              </svg>
+              <HiShoppingCart className="w-16 h-16 text-primary-400" />
             </div>
             <h1 className="text-4xl font-bold text-primary-900 mb-4">Your Cart is Empty</h1>
             <p className="text-primary-600 mb-8 text-lg">Looks like you haven't added anything to your cart yet.</p>
