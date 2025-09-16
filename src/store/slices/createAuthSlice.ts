@@ -19,7 +19,7 @@ initializeAuth: () => void;
 /**
  * Creates the authentication slice for the Zustand store.
  */
-export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
+export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => ({
 // --- STATE ---
 user: null,
 authLoading: true, // FIX: Default to true to prevent pages from rendering before the auth check is complete.
@@ -28,20 +28,26 @@ authError: null,
 // --- ACTIONS ---
 
 /**
- * Checks for user info in localStorage and a token in cookies on initial app load to persist the session.
+ * Initializes auth by checking for valid token in cookies
  */
 initializeAuth: () => {
 try {
-    const storedUser = localStorage.getItem('userInfo');
     const token = Cookies.get('auth_token');
-    if (storedUser && token) {
-    set({ user: JSON.parse(storedUser) });
+    const currentUser = get().user;
+    
+    if (!token && currentUser) {
+        // Token expired but user still in store, clear user
+        set({ user: null });
+    } else if (token && !currentUser) {
+        // Token exists but no user in store, this shouldn't happen with persistence
+        // but we'll clear the invalid token
+        Cookies.remove('auth_token');
     }
 } catch (error) {
     console.error("Failed to initialize auth session:", error);
-    set({ user: null }); // Clear user state if there's an error
+    set({ user: null });
+    Cookies.remove('auth_token');
 } finally {
-    // FIX: This ensures authLoading is set to false only after the try/catch block has finished.
     set({ authLoading: false });
 }
 },
@@ -54,7 +60,6 @@ set({ authLoading: true, authError: null });
 try {
     const { data } = await api.post('/auth/login', { email, password });
     set({ user: data, authLoading: false });
-    localStorage.setItem('userInfo', JSON.stringify(data));
     Cookies.set('auth_token', data.token, { expires: 30 });
 } catch (err: any) {
     const errorMsg = err.response?.data?.message || 'Login failed. Please check your credentials.';
@@ -70,7 +75,6 @@ set({ authLoading: true, authError: null });
 try {
     const { data } = await api.post('/auth/register', { name, email, password });
     set({ user: data, authLoading: false });
-    localStorage.setItem('userInfo', JSON.stringify(data));
     Cookies.set('auth_token', data.token, { expires: 30 });
 } catch (err: any) {
     const errorMsg = err.response?.data?.message || 'Registration failed. Please try again.';
@@ -82,8 +86,7 @@ try {
  * Logs out the user by clearing the state and removing stored data and token.
  */
 logoutUser: () => {
-set({ user: null, authError: null });
-localStorage.removeItem('userInfo');
+set({ user: null, authError: null, items: [] });
 Cookies.remove('auth_token');
 },
 });

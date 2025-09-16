@@ -119,10 +119,10 @@ export default function ProductDetailPage() {
               {/* Price */}
               <div className="flex items-center space-x-4 mb-8">
                 <span className="text-4xl font-bold text-primary-900">
-                  ${selectedProduct.price.toFixed(2)}
+                  ₹{selectedProduct.price.toFixed(2)}
                 </span>
                 <span className="text-xl text-primary-400 line-through">
-                  ${(selectedProduct.price * 1.2).toFixed(2)}
+                  ₹{(selectedProduct.price * 1.2).toFixed(2)}
                 </span>
                 <span className="bg-success text-white px-3 py-1 rounded-full text-sm font-semibold">
                   Save 20%

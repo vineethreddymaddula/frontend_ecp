@@ -60,9 +60,9 @@ export default function OrderDetailPage() {
                   />
                   <div className="flex-grow">
                     <p className="font-semibold text-primary">{item.name}</p>
-                    <p className="text-sm text-gray-500">{item.quantity} x ${item.price.toFixed(2)}</p>
+                    <p className="text-sm text-gray-500">{item.quantity} x ₹{item.price.toFixed(2)}</p>
                   </div>
-                  <p className="font-semibold text-primary">${(item.quantity * item.price).toFixed(2)}</p>
+                  <p className="font-semibold text-primary">₹{(item.quantity * item.price).toFixed(2)}</p>
                 </div>
               ))}
             </div>
@@ -83,12 +83,12 @@ export default function OrderDetailPage() {
           <div>
             <h2 className="text-xl font-semibold mb-4 text-primary">Order Summary</h2>
             <div className="space-y-2 text-gray-700">
-              <div className="flex justify-between"><span>Items Price:</span><span>${selectedOrder.itemsPrice.toFixed(2)}</span></div>
-              <div className="flex justify-between"><span>Shipping:</span><span>${selectedOrder.shippingPrice.toFixed(2)}</span></div>
-              <div className="flex justify-between"><span>Tax:</span><span>${selectedOrder.taxPrice.toFixed(2)}</span></div>
+              <div className="flex justify-between"><span>Items Price:</span><span>₹{selectedOrder.itemsPrice.toFixed(2)}</span></div>
+              <div className="flex justify-between"><span>Shipping:</span><span>₹{selectedOrder.shippingPrice.toFixed(2)}</span></div>
+              <div className="flex justify-between"><span>Tax:</span><span>₹{selectedOrder.taxPrice.toFixed(2)}</span></div>
               <div className="flex justify-between font-bold text-lg text-primary border-t pt-2 mt-2">
                 <span>Total:</span>
-                <span>${selectedOrder.totalPrice.toFixed(2)}</span>
+                <span>₹{selectedOrder.totalPrice.toFixed(2)}</span>
               </div>
             </div>
           </div>

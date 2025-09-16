@@ -95,8 +95,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
         
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-primary-900">${product.price.toFixed(2)}</span>
-            <span className="text-sm text-primary-400 line-through">${(product.price * 1.2).toFixed(2)}</span>
+            <span className="text-2xl font-bold text-primary-900">₹{product.price.toFixed(2)}</span>
+            <span className="text-sm text-primary-400 line-through">₹{(product.price * 1.2).toFixed(2)}</span>
           </div>
           <span className="text-sm text-success font-medium">Free Shipping</span>
         </div>

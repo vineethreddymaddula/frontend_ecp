@@ -57,7 +57,7 @@ export default function CartPage() {
                   <div className="flex-grow text-center sm:text-left">
                     <h3 className="text-xl font-semibold text-primary-900 mb-1">{item.name}</h3>
                     <p className="text-primary-500 text-sm mb-2">{item.category}</p>
-                    <p className="text-2xl font-bold text-accent">${item.price.toFixed(2)}</p>
+                    <p className="text-2xl font-bold text-accent">₹{item.price.toFixed(2)}</p>
                   </div>
                   
                   <div className="flex items-center gap-6 flex-shrink-0">
@@ -78,7 +78,7 @@ export default function CartPage() {
                     </div>
                     
                     <div className="text-right">
-                      <p className="text-xl font-bold text-primary-900">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-xl font-bold text-primary-900">₹{(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                     
                     <button 
@@ -104,7 +104,7 @@ export default function CartPage() {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-primary-600">
                   <span>Subtotal ({items.length} items)</span>
-                  <span className="font-semibold">${subtotal.toFixed(2)}</span>
+                  <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-primary-600">
                   <span>Shipping</span>
@@ -112,12 +112,12 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-primary-600">
                   <span>Tax</span>
-                  <span className="font-semibold">${tax.toFixed(2)}</span>
+                  <span className="font-semibold">₹{tax.toFixed(2)}</span>
                 </div>
                 <div className="border-t border-primary-200 pt-4">
                   <div className="flex justify-between text-xl font-bold text-primary-900">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>₹{total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

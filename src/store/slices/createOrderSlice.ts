@@ -10,7 +10,7 @@ export interface OrderSlice {
   orderError: string | null;
   fetchMyOrders: () => Promise<void>;
   fetchOrderById: (id: string) => Promise<void>;
-  createOrder: (orderData: Omit<IOrder, '_id' | 'user' | 'createdAt' | 'updatedAt' | 'isPaid' | 'isDelivered' | 'paidAt' | 'deliveredAt' | 'paymentResult'>) => Promise<IOrder | null>;
+  createOrder: (orderData: Omit<IOrder, '_id' | 'user' | 'createdAt' | 'updatedAt' | 'isDelivered' | 'deliveredAt'>) => Promise<IOrder | null>;
 }
 
 // --- THE FIX IS HERE ---

@@ -122,7 +122,7 @@ export default function AdminDashboard() {
                 <h3 className="font-bold text-lg text-primary">{product.name}</h3>
                 <p className="text-sm text-gray-500">{product.category}</p>
                 <div className="mt-2 flex justify-between items-center">
-                  <span className="text-lg font-semibold text-accent">${product.price.toFixed(2)}</span>
+                  <span className="text-lg font-semibold text-accent">₹{product.price.toFixed(2)}</span>
                   <span className="text-xs font-medium bg-gray-100 text-gray-700 px-2 py-1 rounded-full">{product.stock} in stock</span>
                 </div>
                 <div className="mt-4 pt-4 border-t flex-grow flex items-end justify-end gap-2">

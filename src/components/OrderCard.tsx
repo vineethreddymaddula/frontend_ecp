@@ -39,7 +39,7 @@ export default function OrderCard({ order }: OrderCardProps) {
         {/* Right Side: Total and Actions */}
         <div className="flex flex-col items-start md:items-end border-t md:border-none pt-4 md:pt-0 flex-shrink-0">
           <p className="text-gray-600 text-sm">Total</p>
-          <p className="font-bold text-2xl text-primary mb-3">${order.totalPrice.toFixed(2)}</p>
+          <p className="font-bold text-2xl text-primary mb-3">₹{order.totalPrice.toFixed(2)}</p>
           <Link href={`/profile/orders/${order._id}`} className="bg-accent text-white font-bold py-2 px-5 rounded-lg hover:bg-accent-hover transition-colors text-sm w-full md:w-auto text-center">
             View Details
           </Link>
