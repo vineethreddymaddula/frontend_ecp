@@ -2,35 +2,33 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  // This log helps confirm the middleware is running
+  console.log(`MIDDLEWARE RUNNING FOR PATH: ${request.nextUrl.pathname}`);
+
   const path = request.nextUrl.pathname;
   const token = request.cookies.get('auth_token')?.value;
 
-  // Define paths that require authentication
-  const protectedPaths = ['/', '/cart', '/checkout', '/admin'];
-
-  // Define paths for authentication (login, register)
+  // --- THE FIX: Ensure '/checkout' is in this list ---
+  const protectedPaths = ['/profile', '/admin', '/checkout'];
   const authPaths = ['/login', '/register'];
 
-  // If the user has a token and tries to access login/register, redirect to home
+  // If a logged-in user tries to access login/register, redirect them to the home page
   if (token && authPaths.some(p => path.startsWith(p))) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // If the user does not have a token and is trying to access a protected path, redirect to login
+  // If a guest tries to access a protected path, redirect them to the login page
   if (!token && protectedPaths.some(p => path.startsWith(p))) {
-    // Add a query param to redirect back to the intended page after login
     const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', path);
+    loginUrl.searchParams.set('redirect', path); // This sends them back to checkout after login
     return NextResponse.redirect(loginUrl);
   }
 
-  // Otherwise, allow the request to proceed
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    // Match all paths except for static files and API routes
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };

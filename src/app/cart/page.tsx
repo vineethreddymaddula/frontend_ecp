@@ -124,9 +124,9 @@ export default function CartPage() {
 
               <Link href="/checkout">
                 <button className="w-full bg-gradient-to-r from-accent to-purple-600 text-white font-bold py-4 rounded-xl hover:shadow-premium transform hover:scale-105 transition-all duration-300 mb-4">
-                  Proceed to Checkout
+            Proceed to Checkout
                 </button>
-              </Link>
+          </Link>
 
               <Link href="/">
                 <button className="w-full border-2 border-accent text-accent font-bold py-4 rounded-xl hover:bg-accent hover:text-white transition-all duration-300">
