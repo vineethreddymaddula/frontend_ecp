@@ -6,106 +6,105 @@ import { useRouter } from 'next/navigation';
 import FormInput from '@/components/FormInput';
 import Spinner from '@/components/spinner';
 import api from '@/lib/axios';
+import { paymentConfig, getAvailablePaymentMethods } from '@/utils/paymentConfig';
 
+// This tells TypeScript that the payment SDKs will be available on the window object
 declare global {
   interface Window {
     Razorpay: any;
+    // cashfree: any;
   }
 }
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { user, authLoading, items, createOrder, orderLoading, orderError } = useAppStore();
+  const { user, authLoading, items, createOrder, orderLoading, orderError, clearCart } = useAppStore();
+  const availablePaymentMethods = getAvailablePaymentMethods();
+
+  const [shippingAddress, setShippingAddress] = React.useState({
+    address: '',
+    city: '',
+    postalCode: '',
+  });
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
+  };
 
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const shippingCost = 0;
   const taxCost = subtotal * 0.08;
-  const finalTotal = subtotal + shippingCost + taxCost;
+  const finalTotal = subtotal + taxCost;
 
-  const handleRazorpayPayment = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
+  const handlePayment = async (paymentMethodId: 'razorpay' /* | 'cashfree' */) => {
+    if (!shippingAddress.address || !shippingAddress.city || !shippingAddress.postalCode) {
+      return alert("Please fill in all shipping details first.");
+    }
+
+    // Capitalize for storing in the database, e.g., 'razorpay' -> 'Razorpay'
+    const paymentMethodName = paymentMethodId.charAt(0).toUpperCase() + paymentMethodId.slice(1);
+
     try {
-      const { data: razorpayOrder } = await api.post('/payments/razorpay/create-order', {
-        amount: finalTotal,
+      const preliminaryOrder = await createOrder({
+        orderItems: items.map(item => ({ ...item, product: item._id, image: item.images[0] || '' })),
+        shippingAddress,
+        paymentMethod: paymentMethodName,
+        itemsPrice: subtotal, taxPrice: taxCost, shippingPrice: 0, totalPrice: finalTotal,
+        isPaid: false,
       });
 
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: razorpayOrder.amount,
-        currency: "INR",
-        name: "E-Store",
-        description: "E-Commerce Transaction",
-        order_id: razorpayOrder.id,
-        handler: async function (response: any) {
-          const verificationRes = await api.post('/payments/razorpay/verify-payment', response);
+      if (!preliminaryOrder) {
+        throw new Error(orderError || "Could not create initial order.");
+      }
 
-          if (verificationRes.data.status === 'success') {
-            const shippingAddress = {
-              address: formData.get('address') as string,
-              city: formData.get('city') as string,
-              postalCode: formData.get('postal_code') as string,
-            };
-            
-            const newOrder = await createOrder({
-              orderItems: items.map(item => ({
-                name: item.name,
-                quantity: item.quantity,
-                image: item.images[0] || '/placeholder.png',
-                price: item.price,
-                product: item._id,
-              })),
-              shippingAddress,
-              paymentMethod: 'Razorpay',
-              paymentResult: {
-                id: response.razorpay_payment_id,
-                status: 'Completed',
-                update_time: new Date().toISOString(),
-                email_address: user!.email
-              },
-              itemsPrice: subtotal,
-              taxPrice: taxCost,
-              shippingPrice: shippingCost,
-              totalPrice: finalTotal,
-              isPaid: true,
-              paidAt: new Date().toISOString()
-            });
+      if (paymentMethodId === 'razorpay') {
+        const { data: razorpayOrder } = await api.post('/payments/razorpay/create-order', { amount: finalTotal });
 
-            if (newOrder) {
-              router.push(`/order-confirmation/${newOrder._id}`);
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          amount: razorpayOrder.amount,
+          currency: "INR",
+          name: "E-Store",
+          order_id: razorpayOrder.id,
+          handler: async function (response: any) {
+            // FIX: Corrected typo in API endpoint 'razoray' -> 'razorpay'
+            const verificationRes = await api.post('/payments/razorpay/verify-payment', { ...response, orderId: preliminaryOrder._id });
+            if (verificationRes.data.status === 'success') {
+              clearCart();
+              router.push(`/order-confirmation/${preliminaryOrder._id}`);
+            } else {
+              alert('Payment verification failed.');
             }
-          } else {
-            alert('Payment verification failed. Please try again.');
-          }
-        },
-        prefill: { 
-          name: user?.name, 
-          email: user?.email,
-          contact: '9999999999'
-        },
-        theme: { color: "#0070f3" },
-      };
+          },
+          prefill: { name: user?.name, email: user?.email, contact: '9999999999' },
+          theme: { color: "#0070f3" },
+        };
 
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.open();
-      paymentObject.on('payment.failed', function (response: any){
-          alert(`Payment failed: ${response.error.description}`);
-      });
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+        paymentObject.on('payment.failed', (response: any) => alert(response.error.description));
 
+      } 
+      // Cashfree payment method temporarily disabled
+      /* else if (paymentMethodId === 'cashfree') {
+        const { data: cashfreeOrder } = await api.post('/payments/cashfree/create-order', {
+          amount: finalTotal,
+          orderId: preliminaryOrder._id,
+          return_url: `${window.location.origin}/order-confirmation?order_id={order_id}`
+        });
+
+        if (cashfreeOrder && cashfreeOrder.payment_link) {
+          window.location.href = cashfreeOrder.payment_link;
+        } else {
+          // This addresses the error: log the response to see why payment_link is missing.
+          console.error("Invalid response from Cashfree order creation:", cashfreeOrder);
+          throw new Error('Could not retrieve Cashfree payment link. Check console for details.');
+        }
+      } */
     } catch (error) {
-      console.error("Payment failed", error);
-      alert("An error occurred. Please try again.");
+      console.error(`${paymentMethodName} Payment failed`, error);
+      alert('Payment initialization failed. Please try again.');
     }
   };
-  
-  // Show spinner while auth is loading. If not authenticated after loading, redirect to login (fallback for client-side nav).
-  // Redirect to login if not authenticated after loading
-  React.useEffect(() => {
-    if (!authLoading && !user) {
-      router.replace(`/login?redirect=/checkout`);
-    }
-  }, [authLoading, user, router]);
 
   if (authLoading || !user) {
     return <Spinner />;
@@ -118,17 +117,16 @@ export default function CheckoutPage() {
         <p className="mt-2 text-lg text-gray-600">You're just a few steps away from your new items.</p>
       </div>
 
-      <form onSubmit={handleRazorpayPayment} className="grid grid-cols-1 lg:grid-cols-12 gap-x-12">
-        
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12">
         <div className="lg:col-span-7 bg-white p-8 rounded-lg shadow-subtle space-y-10">
           <div>
             <h2 className="text-2xl font-semibold text-primary mb-6 border-b pb-4">Shipping Information</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="sm:col-span-2"><FormInput label="Full Name" id="name" type="text" defaultValue={user.name} required /></div>
-              <div className="sm:col-span-2"><FormInput label="Email Address" id="email" type="email" defaultValue={user.email} required /></div>
-              <div className="sm:col-span-2"><FormInput label="Address" id="address" name="address" type="text" placeholder="123 Main St" required /></div>
-              <FormInput label="City" id="city" name="city" type="text" placeholder="New York" required />
-              <FormInput label="Postal Code" id="postal_code" name="postal_code" type="text" placeholder="10001" required />
+              <div className="sm:col-span-2"><FormInput label="Full Name" id="name" type="text" defaultValue={user.name} required readOnly /></div>
+              <div className="sm:col-span-2"><FormInput label="Email Address" id="email" type="email" defaultValue={user.email} required readOnly /></div>
+              <div className="sm:col-span-2"><FormInput label="Address" id="address" name="address" type="text" placeholder="123 Main St" required onChange={handleAddressChange} value={shippingAddress.address} /></div>
+              <FormInput label="City" id="city" name="city" type="text" placeholder="New York" required onChange={handleAddressChange} value={shippingAddress.city} />
+              <FormInput label="Postal Code" id="postalCode" name="postalCode" type="text" placeholder="10001" required onChange={handleAddressChange} value={shippingAddress.postalCode} />
             </div>
           </div>
         </div>
@@ -138,22 +136,28 @@ export default function CheckoutPage() {
             <h2 className="text-2xl font-semibold text-primary mb-6 border-b pb-4">Order Summary</h2>
             <div className="space-y-3">
               <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-              <div className="flex justify-between text-gray-600"><span>Shipping</span><span>${shippingCost.toFixed(2)}</span></div>
+              <div className="flex justify-between text-gray-600"><span>Shipping</span><span>$0.00</span></div>
               <div className="flex justify-between text-gray-600"><span>Tax (8%)</span><span>${taxCost.toFixed(2)}</span></div>
               <div className="flex justify-between font-bold text-xl text-primary border-t pt-3 mt-3"><span>Total</span><span>${finalTotal.toFixed(2)}</span></div>
             </div>
             {orderError && <p className="text-sm text-red-600 text-center mt-4">{orderError}</p>}
-            <div className="mt-6 space-y-4">
-              <button type="submit" disabled={orderLoading || items.length === 0} className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 disabled:bg-gray-400">
-                {orderLoading ? 'Processing...' : 'Continue with Razorpay'}
-              </button>
-              <button type="button" disabled className="w-full bg-green-600 text-white font-bold py-3 rounded-lg transition-all duration-300 disabled:bg-gray-400">
-                Continue with Cashfree
-              </button>
+            <div className="mt-6 border-t pt-6 space-y-4">
+              <h3 className="text-lg font-semibold text-center text-primary">Choose a Payment Method</h3>
+              {availablePaymentMethods.map((method) => (
+                <button
+                  key={method.id}
+                  onClick={() => handlePayment(method.id as 'razorpay' /* | 'cashfree' */)}
+                  type="button"
+                  disabled={orderLoading || items.length === 0}
+                  className={`w-full font-bold py-3 rounded-lg transition-all duration-300 disabled:bg-gray-400 ${method.id === 'razorpay' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                >
+                  {orderLoading ? 'Processing...' : `Continue with ${method.name}`}
+                </button>
+              ))}
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

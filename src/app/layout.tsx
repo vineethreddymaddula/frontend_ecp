@@ -22,9 +22,13 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-       <Script
+      <Script
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
+      />
+      <Script
+        id="cashfree-js"
+        src="https://sdk.cashfree.com/js/ui/2.0.0/cashfree.sandbox.js"
       />
       <body className="bg-secondary min-h-screen">
         <StoreHydration>

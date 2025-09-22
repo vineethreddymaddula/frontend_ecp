@@ -86,7 +86,7 @@ try {
  * Logs out the user by clearing the state and removing stored data and token.
  */
 logoutUser: () => {
-set({ user: null, authError: null, items: [] });
+set({ user: null, authError: null });
 Cookies.remove('auth_token');
 },
 });
