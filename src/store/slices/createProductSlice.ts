@@ -36,8 +36,9 @@ export const createProductSlice: StateCreator<ProductSlice> = (set, get) => ({
     try {
       const response = await api.get<IProduct[]>('/products');
       set({ products: response.data, loading: false });
-    } catch (err: any) {
-      set({ error: err.response?.data?.message || err.message, loading: false });
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } }; message?: string };
+      set({ error: error.response?.data?.message || error.message || 'An error occurred', loading: false });
     }
   },
 
@@ -46,8 +47,9 @@ export const createProductSlice: StateCreator<ProductSlice> = (set, get) => ({
     try {
       const response = await api.get<IProduct>(`/products/${id}`);
       set({ selectedProduct: response.data, loading: false });
-    } catch (err: any) {
-      set({ error: err.response?.data?.message || err.message, loading: false });
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } }; message?: string };
+      set({ error: error.response?.data?.message || error.message || 'An error occurred', loading: false });
     }
   },
 
@@ -58,8 +60,9 @@ export const createProductSlice: StateCreator<ProductSlice> = (set, get) => ({
       set({ loading: false });
       await get().fetchProducts(); // Refresh list after creation
       return true;
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.message || 'Failed to create product';
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      const errorMsg = error.response?.data?.message || 'Failed to create product';
       set({ error: errorMsg, loading: false });
       return false;
     }
@@ -75,8 +78,9 @@ export const createProductSlice: StateCreator<ProductSlice> = (set, get) => ({
         loading: false,
       }));
       return true;
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.message || 'Failed to update product';
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      const errorMsg = error.response?.data?.message || 'Failed to update product';
       set({ error: errorMsg, loading: false });
       return false;
     }
@@ -92,8 +96,9 @@ export const createProductSlice: StateCreator<ProductSlice> = (set, get) => ({
         loading: false,
       }));
       return true;
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.message || 'Failed to delete product';
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      const errorMsg = error.response?.data?.message || 'Failed to delete product';
       set({ error: errorMsg, loading: false });
       return false;
     }

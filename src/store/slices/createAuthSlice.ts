@@ -61,8 +61,8 @@ try {
     const { data } = await api.post('/auth/login', { email, password });
     set({ user: data, authLoading: false });
     Cookies.set('auth_token', data.token, { expires: 30 });
-} catch (err: any) {
-    const errorMsg = err.response?.data?.message || 'Login failed. Please check your credentials.';
+} catch (err: unknown) {
+    const errorMsg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Login failed. Please check your credentials.';
     set({ authError: errorMsg, authLoading: false, user: null });
 }
 },
@@ -76,8 +76,8 @@ try {
     const { data } = await api.post('/auth/register', { name, email, password });
     set({ user: data, authLoading: false });
     Cookies.set('auth_token', data.token, { expires: 30 });
-} catch (err: any) {
-    const errorMsg = err.response?.data?.message || 'Registration failed. Please try again.';
+} catch (err: unknown) {
+    const errorMsg = (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Registration failed. Please try again.';
     set({ authError: errorMsg, authLoading: false, user: null });
 }
 },

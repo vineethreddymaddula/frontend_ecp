@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import { useAppStore } from '@/store';
 import Spinner from '@/components/spinner';
 
@@ -53,9 +54,11 @@ export default function OrderDetailPage() {
             <div className="space-y-4">
               {selectedOrder.orderItems.map((item) => (
                 <div key={item.product} className="flex items-center gap-4 border-b py-4 last:border-b-0">
-                  <img 
+                  <Image 
                     src={item.image} 
                     alt={item.name} 
+                    width={64}
+                    height={64}
                     className="w-16 h-16 rounded-md object-cover flex-shrink-0" 
                   />
                   <div className="flex-grow">

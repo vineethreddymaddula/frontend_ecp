@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface AuthFormProps {
   formType: 'login' | 'register';
-  onSubmit: (formData: any) => void;
+  onSubmit: (formData: { name: string; email: string; password: string }) => void;
   isLoading: boolean;
   error: string | null;
 }
@@ -153,7 +154,7 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
             <div className="text-center mt-8">
               {isLogin ? (
                 <p className="text-primary-600">
-                  Don't have an account? 
+                  Don&apos;t have an account? 
                   <Link href="/register" className="font-semibold text-accent hover:text-purple-600 ml-1 transition-colors">
                     Sign up here
                   </Link>
@@ -173,9 +174,11 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
         {/* Image Section */}
         <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-accent/90 to-purple-600/90"></div>
-          <img 
+          <Image 
             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1000&auto=format&fit=crop" 
             alt="Shopping Experience" 
+            width={1000}
+            height={600}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 flex items-center justify-center p-12">

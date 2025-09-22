@@ -7,7 +7,7 @@ interface ToastProps {
 }
 
 const Toast = ({ message, show, type = 'success' }: ToastProps) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (show) {
@@ -16,7 +16,7 @@ const Toast = ({ message, show, type = 'success' }: ToastProps) => {
       const timer = setTimeout(() => setIsVisible(false), 300);
       return () => clearTimeout(timer);
     }
-  }, [show]);
+  }, [show, setIsVisible]);
 
   if (!show) return null;
 

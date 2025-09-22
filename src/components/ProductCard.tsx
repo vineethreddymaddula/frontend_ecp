@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { IProduct } from '@/interfaces/product.interface';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAppStore } from '@/store';
 import { HiShoppingCart } from 'react-icons/hi';
 
@@ -29,9 +30,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-primary-100 via-primary-50 to-primary-100"></div>
           )}
           
-          <img
+          <Image
             src={product.images[0] || 'https://images.pexels.com/photos/6604246/pexels-photo-6604246.jpeg'}
             alt={product.name}
+            width={400}
+            height={256}
             className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-500 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 const HeroSection = () => {
   return (
@@ -57,9 +58,11 @@ const HeroSection = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-purple-600/20 rounded-3xl transform rotate-6"></div>
               <div className="relative bg-white rounded-3xl shadow-premium p-8 transform -rotate-2 hover:rotate-0 transition-transform duration-500">
-                <img 
+                <Image 
                   src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1000&auto=format&fit=crop" 
                   alt="Shopping Experience" 
+                  width={1000}
+                  height={320}
                   className="w-full h-80 object-cover rounded-2xl"
                 />
                 <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-success to-green-400 text-white p-4 rounded-2xl shadow-lg animate-float">

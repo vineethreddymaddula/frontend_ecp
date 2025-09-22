@@ -6,12 +6,26 @@ import { useRouter } from 'next/navigation';
 import FormInput from '@/components/FormInput';
 import Spinner from '@/components/spinner';
 import api from '@/lib/axios';
-import { paymentConfig, getAvailablePaymentMethods } from '@/utils/paymentConfig';
+import { getAvailablePaymentMethods } from '@/utils/paymentConfig';
 
 // This tells TypeScript that the payment SDKs will be available on the window object
 declare global {
   interface Window {
-    Razorpay: any;
+    Razorpay: {
+      new (options: {
+        key: string;
+        amount: number;
+        currency: string;
+        name: string;
+        order_id: string;
+        handler: (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => void | Promise<void>;
+        prefill: { name?: string; email?: string; contact?: string };
+        theme: { color: string };
+      }): {
+        open(): void;
+        on(event: string, callback: (response: { error: { description: string } }) => void): void;
+      };
+    };
     // cashfree: any;
   }
 }
@@ -60,12 +74,12 @@ export default function CheckoutPage() {
         const { data: razorpayOrder } = await api.post('/payments/razorpay/create-order', { amount: finalTotal });
 
         const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-          amount: razorpayOrder.amount,
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
+          amount: Number(razorpayOrder.amount),
           currency: "INR",
           name: "E-Store",
-          order_id: razorpayOrder.id,
-          handler: async function (response: any) {
+          order_id: String(razorpayOrder.id),
+          handler: async function (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
             // FIX: Corrected typo in API endpoint 'razoray' -> 'razorpay'
             const verificationRes = await api.post('/payments/razorpay/verify-payment', { ...response, orderId: preliminaryOrder._id });
             if (verificationRes.data.status === 'success') {
@@ -75,13 +89,13 @@ export default function CheckoutPage() {
               alert('Payment verification failed.');
             }
           },
-          prefill: { name: user?.name, email: user?.email, contact: '9999999999' },
+          prefill: { name: user?.name || '', email: user?.email || '', contact: '9999999999' },
           theme: { color: "#0070f3" },
         };
 
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
-        paymentObject.on('payment.failed', (response: any) => alert(response.error.description));
+        paymentObject.on('payment.failed', (response: { error: { description: string } }) => alert(response.error.description));
 
       } 
       // Cashfree payment method temporarily disabled
@@ -114,7 +128,7 @@ export default function CheckoutPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-primary tracking-tight">Complete Your Order</h1>
-        <p className="mt-2 text-lg text-gray-600">You're just a few steps away from your new items.</p>
+        <p className="mt-2 text-lg text-gray-600">You&apos;re just a few steps away from your new items.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12">

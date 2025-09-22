@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useAppStore } from "@/store";
 import EditProductModal from "@/components/EditProductModal";
 import ConfirmModal from "@/components/ConfirmModal";
@@ -48,7 +49,7 @@ export default function AdminDashboard() {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const handleSaveChanges = async (formData: any) => {
+  const handleSaveChanges = async (formData: { name: string; description: string; price: string; category: string; stock: string; images: string }) => {
     if (!selectedProduct) return;
     const images = (formData.images as string).split(",").map((url) => url.trim()).filter(Boolean);
     const productData = { ...formData, price: parseFloat(formData.price), stock: parseInt(formData.stock, 10), images };
@@ -117,7 +118,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map(product => (
             <div key={product._id} className="border rounded-lg overflow-hidden flex flex-col hover:shadow-lg transition-shadow">
-              <img src={product.images[0] || '/placeholder.png'} alt={product.name} className="w-full h-48 object-cover" />
+              <Image src={product.images[0] || '/placeholder.png'} alt={product.name} width={400} height={192} className="w-full h-48 object-cover" />
               <div className="p-4 flex flex-col flex-grow">
                 <h3 className="font-bold text-lg text-primary">{product.name}</h3>
                 <p className="text-sm text-gray-500">{product.category}</p>

@@ -5,12 +5,12 @@ interface EditProductModalProps {
   product: IProduct | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (productData: any) => void;
+  onSave: (productData: { name: string; description: string; price: string; category: string; stock: string; images: string }) => void;
   isLoading: boolean;
 }
 
 export default function EditProductModal({ product, isOpen, onClose, onSave, isLoading }: EditProductModalProps) {
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<{ name: string; description: string; price: string; category: string; stock: string; images: string }>({ name: '', description: '', price: '', category: '', stock: '', images: '' });
 
   useEffect(() => {
     // Pre-fill form when a product is selected
@@ -18,9 +18,9 @@ export default function EditProductModal({ product, isOpen, onClose, onSave, isL
       setFormData({
         name: product.name,
         description: product.description,
-        price: product.price,
+        price: product.price.toString(),
         category: product.category,
-        stock: product.stock,
+        stock: product.stock.toString(),
         images: product.images.join(', '), // Convert array to comma-separated string for the textarea
       });
     }

@@ -26,8 +26,8 @@ export const createOrderSlice: StateCreator<OrderSlice & CartSlice, [], [], Orde
     try {
       const { data } = await api.get<IOrder[]>('/orders/myorders');
       set({ myOrders: data, orderLoading: false });
-    } catch (err: any) {
-      set({ orderError: err.response?.data?.message || 'Failed to fetch orders', orderLoading: false });
+    } catch (err: unknown) {
+      set({ orderError: (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to fetch orders', orderLoading: false });
     }
   },
 
@@ -36,8 +36,8 @@ export const createOrderSlice: StateCreator<OrderSlice & CartSlice, [], [], Orde
     try {
       const { data } = await api.get<IOrder>(`/orders/${id}`);
       set({ selectedOrder: data, orderLoading: false });
-    } catch (err: any) {
-      set({ orderError: err.response?.data?.message || 'Failed to fetch order', orderLoading: false });
+    } catch (err: unknown) {
+      set({ orderError: (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to fetch order', orderLoading: false });
     }
   },
   
@@ -51,8 +51,8 @@ export const createOrderSlice: StateCreator<OrderSlice & CartSlice, [], [], Orde
       get().clearCart(); 
       
       return newOrder;
-    } catch (err: any) {
-      set({ orderError: err.response?.data?.message || 'Failed to create order', orderLoading: false });
+    } catch (err: unknown) {
+      set({ orderError: (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to create order', orderLoading: false });
       return null;
     }
   },

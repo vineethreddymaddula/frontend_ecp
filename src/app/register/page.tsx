@@ -9,7 +9,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const { registerUser, user, authLoading, authError } = useAppStore();
 
-  const handleRegister = async (formData: any) => {
+  const handleRegister = async (formData: { name: string; email: string; password: string }) => {
     await registerUser(formData.name, formData.email, formData.password);
   };
   

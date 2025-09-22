@@ -9,7 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { loginUser, user, authLoading, authError } = useAppStore();
 
-  const handleLogin = async (formData: any) => {
+  const handleLogin = async (formData: { name: string; email: string; password: string }) => {
     await loginUser(formData.email, formData.password);
   };
   

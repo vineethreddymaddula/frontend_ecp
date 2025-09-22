@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import { useAppStore } from '@/store';
 import Toast from '@/components/Toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -61,7 +62,7 @@ export default function ProductDetailPage() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50">
         <div className="bg-white shadow-elegant rounded-2xl p-8 text-center max-w-md">
           <h2 className="text-2xl font-bold text-primary-900 mb-4">Product Not Found</h2>
-          <p className="text-gray-700">We couldn't find the product you're looking for.</p>
+          <p className="text-gray-700">We couldn&apos;t find the product you&apos;re looking for.</p>
         </div>
       </div>
     );
@@ -75,9 +76,11 @@ export default function ProductDetailPage() {
             {/* Image Gallery */}
             <div className="relative">
               <div className="aspect-square bg-primary-50 overflow-hidden">
-                <img
+                <Image
                   src={selectedProduct.images[0] || '/placeholder.png'}
                   alt={selectedProduct.name}
+                  width={600}
+                  height={600}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>

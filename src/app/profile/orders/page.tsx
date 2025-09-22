@@ -28,7 +28,7 @@ export default function MyOrdersPage() {
         <div className="text-center py-16">
           <EmptyBoxIcon />
           <h2 className="text-2xl font-semibold text-primary mt-4">No Orders Yet</h2>
-          <p className="text-gray-600 mt-2 mb-6">You haven't placed any orders. Let's change that!</p>
+          <p className="text-gray-600 mt-2 mb-6">You haven&apos;t placed any orders. Let&apos;s change that!</p>
           <Link href="/" className="bg-accent text-white font-bold py-3 px-6 rounded-lg hover:bg-accent-hover transition-colors">
             Start Shopping
           </Link>

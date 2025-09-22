@@ -2,6 +2,7 @@
 
 import { useAppStore } from '@/store';
 import Link from 'next/link';
+import Image from 'next/image';
 import { HiShoppingCart } from 'react-icons/hi';
 
 export default function CartPage() {
@@ -22,7 +23,7 @@ export default function CartPage() {
               <HiShoppingCart className="w-16 h-16 text-primary-400" />
             </div>
             <h1 className="text-4xl font-bold text-primary-900 mb-4">Your Cart is Empty</h1>
-            <p className="text-primary-600 mb-8 text-lg">Looks like you haven't added anything to your cart yet.</p>
+            <p className="text-primary-600 mb-8 text-lg">Looks like you haven&apos;t added anything to your cart yet.</p>
             <Link href="/" className="bg-gradient-to-r from-accent to-purple-600 text-white font-bold py-4 px-8 rounded-xl hover:shadow-premium transform hover:scale-105 transition-all duration-300">
               Continue Shopping
             </Link>
@@ -47,9 +48,11 @@ export default function CartPage() {
               <div key={item._id} className="bg-white rounded-2xl shadow-subtle p-6 hover:shadow-elegant transition-shadow duration-300">
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   <div className="relative w-24 h-24 flex-shrink-0">
-                    <img 
+                    <Image 
                       src={item.images[0] || '/placeholder.png'} 
                       alt={item.name} 
+                      width={96}
+                      height={96}
                       className="w-full h-full object-cover rounded-xl" 
                     />
                   </div>
