@@ -5,6 +5,7 @@ import { useAppStore } from '@/store';
 import { useRouter } from 'next/navigation';
 import FormInput from '@/components/FormInput';
 import Spinner from '@/components/spinner';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import api from '@/lib/axios';
 import { getAvailablePaymentMethods } from '@/utils/paymentConfig';
 
@@ -34,6 +35,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { user, authLoading, items, createOrder, orderLoading, orderError, clearCart } = useAppStore();
   const availablePaymentMethods = getAvailablePaymentMethods();
+  const [paymentProcessing, setPaymentProcessing] = React.useState(false);
 
   const [shippingAddress, setShippingAddress] = React.useState({
     address: '',
@@ -80,13 +82,20 @@ export default function CheckoutPage() {
           name: "E-Store",
           order_id: String(razorpayOrder.id),
           handler: async function (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
-            // FIX: Corrected typo in API endpoint 'razoray' -> 'razorpay'
-            const verificationRes = await api.post('/payments/razorpay/verify-payment', { ...response, orderId: preliminaryOrder._id });
-            if (verificationRes.data.status === 'success') {
-              clearCart();
-              router.push(`/order-confirmation/${preliminaryOrder._id}`);
-            } else {
-              alert('Payment verification failed.');
+            setPaymentProcessing(true);
+            try {
+              const verificationRes = await api.post('/payments/razorpay/verify-payment', { ...response, orderId: preliminaryOrder._id });
+              if (verificationRes.data.status === 'success') {
+                clearCart();
+                router.push(`/order-confirmation/${preliminaryOrder._id}`);
+              } else {
+                setPaymentProcessing(false);
+                alert('Payment verification failed.');
+              }
+            } catch (error) {
+              setPaymentProcessing(false);
+              console.error('Payment verification error:', error);
+              alert('Payment verification failed. Please try again.');
             }
           },
           prefill: { name: user?.name || '', email: user?.email || '', contact: '9999999999' },
@@ -95,7 +104,10 @@ export default function CheckoutPage() {
 
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
-        paymentObject.on('payment.failed', (response: { error: { description: string } }) => alert(response.error.description));
+        paymentObject.on('payment.failed', (response: { error: { description: string } }) => {
+          setPaymentProcessing(false);
+          alert(response.error.description);
+        });
 
       } 
       // Cashfree payment method temporarily disabled
@@ -122,6 +134,18 @@ export default function CheckoutPage() {
 
   if (authLoading || !user) {
     return <Spinner />;
+  }
+
+  // Show payment processing loader
+  if (paymentProcessing) {
+    return (
+      <LoadingSpinner 
+        size="xl" 
+        variant="primary" 
+        text="Processing your payment..." 
+        fullScreen={true} 
+      />
+    );
   }
 
   return (
