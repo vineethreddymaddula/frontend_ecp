@@ -80,7 +80,7 @@ Before running this project, make sure you have:
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repository-url>
+   git clone https://github.com/vineethreddymaddula/frontend_ecp
    cd frontend_ecp
    ```
 
@@ -96,7 +96,7 @@ Before running this project, make sure you have:
    Create a `.env` file in the root directory:
    ```env
    # Backend API URL
-   NEXT_PUBLIC_API_BASE_URL=https://backend-ecp.onrender.com/api
+   NEXT_PUBLIC_API_BASE_URL= in .env
    
    # Payment Gateway Keys
    NEXT_PUBLIC_RAZORPAY_KEY_ID= in .env
