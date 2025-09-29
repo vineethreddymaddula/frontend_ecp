@@ -9,6 +9,7 @@ import { CheckoutPageSkeleton } from '@/components/skeletons';
 import api from '@/lib/axios';
 import { getAvailablePaymentMethods } from '@/utils/paymentConfig';
 import Image from 'next/image';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 // This tells TypeScript that the payment SDKs will be available on the window object
 declare global {
@@ -149,7 +150,7 @@ export default function CheckoutPage() {
   // Show payment initializing loader
   if (paymentInitializing) {
     return (
-      <LoadingSpinner 
+      <LoadingSpinner
         size="xl" 
         variant="primary" 
         text="Initializing payment gateway..." 
