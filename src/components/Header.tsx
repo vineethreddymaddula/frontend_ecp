@@ -12,25 +12,20 @@ const CartIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-
 export default function Header() {
   const { user, logoutUser, items } = useAppStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const cartCount = items.reduce((count, item) => count + item.quantity, 0);
 
-  // Close dropdown and mobile menu when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
-        setIsMobileMenuOpen(false);
-      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [dropdownRef, mobileMenuRef]);
+  }, [dropdownRef]);
 
   return (
     <header className="bg-white/95 dark:bg-primary-900/95 backdrop-blur-md shadow-subtle sticky top-0 z-50">

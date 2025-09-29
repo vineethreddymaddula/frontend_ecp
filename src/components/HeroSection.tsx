@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useAppStore } from '@/store';
 
@@ -39,12 +40,14 @@ const HeroSection = () => {
                   className="flex transition-transform duration-500 ease-in-out"
                   style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                 >
-                  {featuredProducts.map((product, index) => (
+                  {featuredProducts.map((product) => (
                     <div key={product._id} className="w-full flex-shrink-0 relative">
                       <Link href={`/product/${product._id}`} className="block">
-                        <img 
-                          src={product.images[0] || 'https://images.pexels.com/photos/6604246/pexels-photo-6604246.jpeg'} 
+                        <Image 
+                          src={product.images?.[0] || 'https://images.pexels.com/photos/6604246/pexels-photo-6604246.jpeg'} 
                           alt={product.name}
+                          width={400}
+                          height={192}
                           className="w-full h-48 object-cover hover:scale-105 transition-transform cursor-pointer"
                         />
                         <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2">
@@ -57,9 +60,9 @@ const HeroSection = () => {
                 </div>
               </div>
               <div className="flex justify-center mt-3 space-x-2">
-                {featuredProducts.map((_, index) => (
+                {featuredProducts.map((product, index) => (
                   <button
-                    key={index}
+                    key={product._id}
                     onClick={() => setCurrentSlide(index)}
                     className={`w-2 h-2 rounded-full transition-colors ${
                       currentSlide === index ? 'bg-accent' : 'bg-primary-300 dark:bg-primary-600'
