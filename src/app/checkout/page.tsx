@@ -35,19 +35,45 @@ declare global {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { user, authLoading, items, createOrder, orderLoading, orderError, clearCart } = useAppStore();
+  const { user, authLoading, items, createOrder, orderLoading, orderError, clearCart, addresses } = useAppStore();
   const availablePaymentMethods = getAvailablePaymentMethods();
   const [paymentProcessing, setPaymentProcessing] = React.useState(false);
   const [paymentInitializing, setPaymentInitializing] = React.useState(false);
 
+  const [selectedAddressId, setSelectedAddressId] = React.useState<number | null>(null);
   const [shippingAddress, setShippingAddress] = React.useState({
     address: '',
     city: '',
     postalCode: '',
   });
+  
+  React.useEffect(() => {
+    const defaultAddress = addresses.find(addr => addr.isDefault);
+    if (defaultAddress) {
+      setSelectedAddressId(defaultAddress.id);
+      setShippingAddress({
+        address: defaultAddress.address,
+        city: defaultAddress.city,
+        postalCode: defaultAddress.postalCode,
+      });
+    }
+  }, [addresses]);
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedAddressId(null);
     setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
+  };
+  
+  const handleSavedAddressSelect = (addressId: number) => {
+    const address = addresses.find(addr => addr.id === addressId);
+    if (address) {
+      setSelectedAddressId(addressId);
+      setShippingAddress({
+        address: address.address,
+        city: address.city,
+        postalCode: address.postalCode,
+      });
+    }
   };
 
   const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -183,6 +209,38 @@ export default function CheckoutPage() {
           {/* Shipping Form */}
           <div className="app-card">
             <h2 className="text-app-lg font-semibold text-primary-900 dark:text-primary-100 mb-4 pb-3 border-b border-primary-200 dark:border-primary-600">Shipping Info</h2>
+            
+            {/* Saved Addresses */}
+            {addresses.length > 0 && (
+              <div className="mb-4">
+                <h3 className="text-app-sm font-medium text-primary-700 dark:text-primary-300 mb-2">Saved Addresses</h3>
+                <div className="space-y-2">
+                  {addresses.map((addr) => (
+                    <button
+                      key={addr.id}
+                      onClick={() => handleSavedAddressSelect(addr.id)}
+                      className={`w-full p-3 text-left rounded-lg border transition-colors ${
+                        selectedAddressId === addr.id
+                          ? 'border-accent bg-accent/10 dark:bg-accent/20'
+                          : 'border-primary-200 dark:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-700'
+                      }`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-medium text-primary-900 dark:text-primary-100 text-app-xs">{addr.type}</p>
+                          <p className="text-primary-600 dark:text-primary-400 text-app-xs">{addr.address}, {addr.city} - {addr.postalCode}</p>
+                        </div>
+                        {addr.isDefault && <span className="text-xs bg-accent text-white px-2 py-1 rounded-full">Default</span>}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-3 pt-3 border-t border-primary-200 dark:border-primary-600">
+                  <p className="text-app-xs text-primary-500 dark:text-primary-400">Or enter a new address below:</p>
+                </div>
+              </div>
+            )}
+            
             <div className="space-y-4">
               <FormInput label="Full Name" id="name" type="text" defaultValue={user.name} required readOnly />
               <FormInput label="Email" id="email" type="email" defaultValue={user.email} required readOnly />

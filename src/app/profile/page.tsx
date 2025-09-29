@@ -25,8 +25,8 @@ export default function ProfileDetailsPage() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' });
-  const [addresses, setAddresses] = useState([{ id: 1, type: 'Home', address: '123 Main St, City, 12345', isDefault: true }]);
-  const [newAddress, setNewAddress] = useState({ type: '', address: '', isDefault: false });
+  const { addresses, addAddress, deleteAddress } = useAppStore();
+  const [newAddress, setNewAddress] = useState({ type: '', address: '', city: '', postalCode: '', isDefault: false });
   const [notifications, setNotifications] = useState({ email: true, sms: false, push: true });
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -61,23 +61,17 @@ export default function ProfileDetailsPage() {
   };
 
   const handleAddAddress = () => {
-    if (!newAddress.type.trim() || !newAddress.address.trim()) {
+    if (!newAddress.type.trim() || !newAddress.address.trim() || !newAddress.city.trim() || !newAddress.postalCode.trim()) {
       showToastMessage('Please fill in all address fields');
       return;
     }
-    const addressToAdd = { 
-      id: Date.now(), 
-      type: newAddress.type, 
-      address: newAddress.address, 
-      isDefault: newAddress.isDefault 
-    };
-    setAddresses([...addresses, addressToAdd]);
-    setNewAddress({ type: '', address: '', isDefault: false });
+    addAddress(newAddress);
+    setNewAddress({ type: '', address: '', city: '', postalCode: '', isDefault: false });
     showToastMessage('Address added successfully');
   };
 
   const handleDeleteAddress = (id: number) => {
-    setAddresses(addresses.filter(addr => addr.id !== id));
+    deleteAddress(id);
     showToastMessage('Address deleted successfully');
   };
 
@@ -321,20 +315,48 @@ export default function ProfileDetailsPage() {
             <div className="border-t border-primary-200 dark:border-primary-700 pt-4">
               <h4 className="font-medium text-primary-900 dark:text-primary-100 mb-3">Add New Address</h4>
               <div className="space-y-3">
-                <input
-                  type="text"
-                  placeholder="Address Type (e.g., Home, Office)"
-                  value={newAddress.type}
-                  onChange={(e) => setNewAddress({...newAddress, type: e.target.value})}
-                  className="w-full p-3 border border-primary-200 dark:border-primary-600 rounded-lg bg-white dark:bg-primary-800 text-primary-900 dark:text-primary-100 text-sm placeholder-primary-500 dark:placeholder-primary-400 focus:ring-2 focus:ring-accent focus:border-transparent"
-                />
-                <textarea
-                  placeholder="Full Address"
-                  value={newAddress.address}
-                  onChange={(e) => setNewAddress({...newAddress, address: e.target.value})}
-                  rows={3}
-                  className="w-full p-3 border border-primary-200 dark:border-primary-600 rounded-lg bg-white dark:bg-primary-800 text-primary-900 dark:text-primary-100 text-sm placeholder-primary-500 dark:placeholder-primary-400 focus:ring-2 focus:ring-accent focus:border-transparent resize-none"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-primary-700 dark:text-primary-300 mb-2">Address Type</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Home, Office"
+                    value={newAddress.type}
+                    onChange={(e) => setNewAddress({...newAddress, type: e.target.value})}
+                    className="w-full p-3 border border-primary-200 dark:border-primary-600 rounded-lg bg-white dark:bg-primary-800 text-primary-900 dark:text-primary-100 text-sm placeholder-primary-500 dark:placeholder-primary-400 focus:ring-2 focus:ring-accent focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-primary-700 dark:text-primary-300 mb-2">Street Address</label>
+                  <input
+                    type="text"
+                    placeholder="123 Main Street"
+                    value={newAddress.address}
+                    onChange={(e) => setNewAddress({...newAddress, address: e.target.value})}
+                    className="w-full p-3 border border-primary-200 dark:border-primary-600 rounded-lg bg-white dark:bg-primary-800 text-primary-900 dark:text-primary-100 text-sm placeholder-primary-500 dark:placeholder-primary-400 focus:ring-2 focus:ring-accent focus:border-transparent"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-primary-700 dark:text-primary-300 mb-2">City</label>
+                    <input
+                      type="text"
+                      placeholder="City"
+                      value={newAddress.city}
+                      onChange={(e) => setNewAddress({...newAddress, city: e.target.value})}
+                      className="w-full p-3 border border-primary-200 dark:border-primary-600 rounded-lg bg-white dark:bg-primary-800 text-primary-900 dark:text-primary-100 text-sm placeholder-primary-500 dark:placeholder-primary-400 focus:ring-2 focus:ring-accent focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-primary-700 dark:text-primary-300 mb-2">Postal Code</label>
+                    <input
+                      type="text"
+                      placeholder="12345"
+                      value={newAddress.postalCode}
+                      onChange={(e) => setNewAddress({...newAddress, postalCode: e.target.value})}
+                      className="w-full p-3 border border-primary-200 dark:border-primary-600 rounded-lg bg-white dark:bg-primary-800 text-primary-900 dark:text-primary-100 text-sm placeholder-primary-500 dark:placeholder-primary-400 focus:ring-2 focus:ring-accent focus:border-transparent"
+                    />
+                  </div>
+                </div>
                 <label className="flex items-center gap-2">
                   <input
                     type="checkbox"
