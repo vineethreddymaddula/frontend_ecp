@@ -6,8 +6,8 @@ import { useAppStore } from '@/store';
 import DarkModeToggle from './DarkModeToggle';
 
 // Self-contained Icon components for a cleaner UI
-const UserIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
-const CartIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>;
+const UserIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
+const CartIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>;
 
 export default function Header() {
   const { user, logoutUser, items } = useAppStore();
@@ -33,20 +33,20 @@ export default function Header() {
   }, [dropdownRef, mobileMenuRef]);
 
   return (
-    <header className="bg-white/90 dark:bg-primary-900/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-primary-100 dark:border-primary-800">
-      <nav className="mobile-container py-3 sm:py-4 flex justify-between items-center">
-        <Link href="/" className="text-xl sm:text-2xl font-bold text-primary-900 dark:text-primary-100 hover:text-accent dark:hover:text-accent transition-colors">
+    <header className="bg-white/95 dark:bg-primary-900/95 backdrop-blur-md shadow-subtle sticky top-0 z-50">
+      <nav className="mobile-container py-2 flex justify-between items-center">
+        <Link href="/" className="text-lg font-bold text-primary-900 dark:text-primary-100 hover:text-accent transition-colors">
           E-Store
         </Link>
         <div className="flex items-center space-x-2">
           {/* Desktop Navigation */}
-          <div className="hidden sm:flex items-center space-x-3">
+          <div className="hidden sm:flex items-center space-x-2">
             <DarkModeToggle />
-            <Link href="/cart" className="relative text-primary-700 dark:text-primary-300 hover:text-accent dark:hover:text-accent transition-colors btn-touch p-2" title="Cart">
+            <Link href="/cart" className="relative text-primary-700 dark:text-primary-300 hover:text-accent transition-colors p-2 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-700" title="Cart">
               <CartIcon />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                  {cartCount > 99 ? '99+' : cartCount}
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
             </Link>
@@ -85,20 +85,20 @@ export default function Header() {
           </div>
 
           {/* Mobile Hamburger Menu */}
-          <div className="sm:hidden flex items-center space-x-2">
-            <Link href="/cart" className="relative text-primary-700 dark:text-primary-300 hover:text-accent dark:hover:text-accent transition-colors btn-touch p-2" title="Cart">
+          <div className="sm:hidden flex items-center space-x-1">
+            <Link href="/cart" className="relative text-primary-700 dark:text-primary-300 p-2 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-700 transition-colors" title="Cart">
               <CartIcon />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center text-[10px]">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center">
                   {cartCount > 9 ? '9+' : cartCount}
                 </span>
               )}
             </Link>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-primary-700 dark:text-primary-300 hover:text-accent dark:hover:text-accent transition-colors btn-touch p-2"
+              className="text-primary-700 dark:text-primary-300 p-2 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-700 transition-colors"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
@@ -107,6 +107,7 @@ export default function Header() {
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
+          
           <div className="sm:hidden fixed inset-0 z-50 " onClick={() => setIsMobileMenuOpen(false)}>
             <div 
               ref={mobileMenuRef}

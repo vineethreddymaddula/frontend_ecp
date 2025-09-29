@@ -8,6 +8,7 @@ import Spinner from '@/components/spinner';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import api from '@/lib/axios';
 import { getAvailablePaymentMethods } from '@/utils/paymentConfig';
+import Image from 'next/image';
 
 // This tells TypeScript that the payment SDKs will be available on the window object
 declare global {
@@ -175,51 +176,90 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-primary-50 dark:bg-primary-900">
-      <div className="mobile-container py-6 sm:py-8">
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-900 dark:text-primary-100 tracking-tight">Complete Your Order</h1>
-          <p className="mt-2 text-base sm:text-lg text-primary-600 dark:text-primary-400">You&apos;re just a few steps away from your new items.</p>
+      <div className="app-container app-padding py-4">
+        <div className="text-center mb-6">
+          <h1 className="text-app-xl font-bold text-primary-900 dark:text-primary-100">Complete Order</h1>
+          <p className="mt-1 text-app-sm text-primary-600 dark:text-primary-400">Just a few steps away</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12">
-          <div className="lg:col-span-7 bg-white dark:bg-primary-800 mobile-padding sm:p-6 lg:p-8 rounded-2xl shadow-subtle space-y-6 sm:space-y-10">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-semibold text-primary-900 dark:text-primary-100 mb-4 sm:mb-6 border-b border-primary-200 dark:border-primary-600 pb-4">Shipping Information</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                <div className="sm:col-span-2"><FormInput label="Full Name" id="name" type="text" defaultValue={user.name} required readOnly /></div>
-                <div className="sm:col-span-2"><FormInput label="Email Address" id="email" type="email" defaultValue={user.email} required readOnly /></div>
-                <div className="sm:col-span-2"><FormInput label="Address" id="address" name="address" type="text" placeholder="123 Main St" required onChange={handleAddressChange} value={shippingAddress.address} /></div>
-                <FormInput label="City" id="city" name="city" type="text" placeholder="New York" required onChange={handleAddressChange} value={shippingAddress.city} />
+        <div className="space-y-4">
+          {/* Shipping Form */}
+          <div className="app-card">
+            <h2 className="text-app-lg font-semibold text-primary-900 dark:text-primary-100 mb-4 pb-3 border-b border-primary-200 dark:border-primary-600">Shipping Info</h2>
+            <div className="space-y-4">
+              <FormInput label="Full Name" id="name" type="text" defaultValue={user.name} required readOnly />
+              <FormInput label="Email" id="email" type="email" defaultValue={user.email} required readOnly />
+              <FormInput label="Address" id="address" name="address" type="text" placeholder="123 Main St" required onChange={handleAddressChange} value={shippingAddress.address} />
+              <div className="grid grid-cols-2 gap-3">
+                <FormInput label="City" id="city" name="city" type="text" placeholder="City" required onChange={handleAddressChange} value={shippingAddress.city} />
                 <FormInput label="Postal Code" id="postalCode" name="postalCode" type="text" placeholder="10001" required onChange={handleAddressChange} value={shippingAddress.postalCode} />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="bg-white dark:bg-primary-800 rounded-2xl shadow-subtle mobile-padding sm:p-6 lg:sticky lg:top-28">
-              <h2 className="text-xl sm:text-2xl font-semibold text-primary-900 dark:text-primary-100 mb-4 sm:mb-6 border-b border-primary-200 dark:border-primary-600 pb-4">Order Summary</h2>
-              <div className="space-y-3">
-                <div className="flex justify-between text-primary-600 dark:text-primary-400 text-sm sm:text-base"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></div>
-                <div className="flex justify-between text-primary-600 dark:text-primary-400 text-sm sm:text-base"><span>Shipping</span><span>Free</span></div>
-                <div className="flex justify-between text-primary-600 dark:text-primary-400 text-sm sm:text-base"><span>Tax (8%)</span><span>₹{taxCost.toFixed(2)}</span></div>
-                <div className="flex justify-between font-bold text-lg sm:text-xl text-primary-900 dark:text-primary-100 border-t border-primary-200 dark:border-primary-600 pt-3 mt-3"><span>Total</span><span>₹{finalTotal.toFixed(2)}</span></div>
+          {/* Order Summary */}
+          <div className="app-card">
+            <h2 className="text-app-lg font-semibold text-primary-900 dark:text-primary-100 mb-4 pb-3 border-b border-primary-200 dark:border-primary-600">Order Summary</h2>
+            
+            {/* Cart Items Preview */}
+            <div className="space-y-2 mb-4">
+              {items.slice(0, 3).map((item) => (
+                <div key={item._id} className="flex items-center gap-3 p-2 bg-primary-50 dark:bg-primary-700 rounded-lg">
+                  <div className="w-10 h-10 bg-primary-200 dark:bg-primary-600 rounded-md flex-shrink-0">
+                    <Image 
+                                      src={item.images[0] || '/placeholder.png'} 
+                                      alt={item.name} 
+                                      width={64}
+                                      height={64}
+                                      className="w-full h-full object-cover rounded-lg" 
+                                    /> </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-app-xs font-medium text-primary-900 dark:text-primary-100 truncate">{item.name}</p>
+                    <p className="text-app-xs text-primary-600 dark:text-primary-400">Qty: {item.quantity}</p>
+                  </div>
+                  <span className="text-app-xs font-semibold text-primary-900 dark:text-primary-100">₹{(item.price * item.quantity).toFixed(0)}</span>
+                </div>
+              ))}
+              {items.length > 3 && (
+                <p className="text-app-xs text-primary-500 dark:text-primary-400 text-center">+{items.length - 3} more items</p>
+              )}
+            </div>
+
+            {/* Price Breakdown */}
+            <div className="space-y-2 text-app-sm">
+              <div className="flex justify-between text-primary-600 dark:text-primary-400">
+                <span>Subtotal</span><span>₹{subtotal.toFixed(0)}</span>
               </div>
-              {orderError && <p className="text-sm text-red-600 dark:text-red-400 text-center mt-4">{orderError}</p>}
-              <div className="mt-6 border-t border-primary-200 dark:border-primary-600 pt-6 space-y-3 sm:space-y-4">
-                <h3 className="text-base sm:text-lg font-semibold text-center text-primary-900 dark:text-primary-100">Choose a Payment Method</h3>
+              <div className="flex justify-between text-primary-600 dark:text-primary-400">
+                <span>Shipping</span><span>Free</span>
+              </div>
+              <div className="flex justify-between text-primary-600 dark:text-primary-400">
+                <span>Tax (8%)</span><span>₹{taxCost.toFixed(0)}</span>
+              </div>
+              <div className="flex justify-between font-bold text-app-base text-primary-900 dark:text-primary-100 border-t border-primary-200 dark:border-primary-600 pt-2">
+                <span>Total</span><span>₹{finalTotal.toFixed(0)}</span>
+              </div>
+            </div>
+
+            {orderError && <p className="text-app-xs text-red-600 dark:text-red-400 text-center mt-3 p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">{orderError}</p>}
+            
+            {/* Payment Methods */}
+            <div className="mt-4 pt-4 border-t border-primary-200 dark:border-primary-600">
+              <h3 className="text-app-sm font-semibold text-center text-primary-900 dark:text-primary-100 mb-3">Payment Method</h3>
+              <div className="space-y-2">
                 {availablePaymentMethods.map((method) => (
                   <button
                     key={method.id}
-                    onClick={() => handlePayment(method.id as 'razorpay' /* | 'cashfree' */)}
+                    onClick={() => handlePayment(method.id as 'razorpay')}
                     type="button"
                     disabled={orderLoading || items.length === 0 || paymentInitializing}
-                    className={`w-full font-bold py-3 sm:py-4 rounded-xl transition-all duration-300 disabled:bg-primary-400 dark:disabled:bg-primary-600 disabled:cursor-not-allowed btn-touch text-sm sm:text-base ${
+                    className={`w-full font-semibold py-3 rounded-xl transition-all duration-300 disabled:bg-primary-400 dark:disabled:bg-primary-600 disabled:cursor-not-allowed btn-touch text-app-sm ${
                       method.id === 'razorpay' 
-                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                        : 'bg-green-600 text-white hover:bg-green-700'
+                        ? 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600' 
+                        : 'bg-green-600 text-white hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600'
                     }`}
                   >
-                    {orderLoading ? 'Processing...' : `Continue with ${method.name}`}
+                    {orderLoading ? 'Processing...' : `Pay with ${method.name}`}
                   </button>
                 ))}
               </div>
