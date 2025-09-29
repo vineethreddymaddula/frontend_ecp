@@ -36,6 +36,7 @@ export default function CheckoutPage() {
   const { user, authLoading, items, createOrder, orderLoading, orderError, clearCart } = useAppStore();
   const availablePaymentMethods = getAvailablePaymentMethods();
   const [paymentProcessing, setPaymentProcessing] = React.useState(false);
+  const [paymentInitializing, setPaymentInitializing] = React.useState(false);
 
   const [shippingAddress, setShippingAddress] = React.useState({
     address: '',
@@ -55,6 +56,8 @@ export default function CheckoutPage() {
     if (!shippingAddress.address || !shippingAddress.city || !shippingAddress.postalCode) {
       return alert("Please fill in all shipping details first.");
     }
+
+    setPaymentInitializing(true);
 
     // Capitalize for storing in the database, e.g., 'razorpay' -> 'Razorpay'
     const paymentMethodName = paymentMethodId.charAt(0).toUpperCase() + paymentMethodId.slice(1);
@@ -82,6 +85,7 @@ export default function CheckoutPage() {
           name: "E-Store",
           order_id: String(razorpayOrder.id),
           handler: async function (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
+            setPaymentInitializing(false);
             setPaymentProcessing(true);
             try {
               const verificationRes = await api.post('/payments/razorpay/verify-payment', { ...response, orderId: preliminaryOrder._id });
@@ -103,7 +107,11 @@ export default function CheckoutPage() {
         };
 
         const paymentObject = new window.Razorpay(options);
+        
+        // Hide initializing loader and open Razorpay
+        setPaymentInitializing(false);
         paymentObject.open();
+        
         paymentObject.on('payment.failed', (response: { error: { description: string } }) => {
           setPaymentProcessing(false);
           alert(response.error.description);
@@ -127,6 +135,7 @@ export default function CheckoutPage() {
         }
       } */
     } catch (error) {
+      setPaymentInitializing(false);
       console.error(`${paymentMethodName} Payment failed`, error);
       alert('Payment initialization failed. Please try again.');
     }
@@ -134,6 +143,18 @@ export default function CheckoutPage() {
 
   if (authLoading || !user) {
     return <Spinner />;
+  }
+
+  // Show payment initializing loader
+  if (paymentInitializing) {
+    return (
+      <LoadingSpinner 
+        size="xl" 
+        variant="primary" 
+        text="Initializing payment gateway..." 
+        fullScreen={true} 
+      />
+    );
   }
 
   // Show payment processing loader
@@ -186,7 +207,7 @@ export default function CheckoutPage() {
                   key={method.id}
                   onClick={() => handlePayment(method.id as 'razorpay' /* | 'cashfree' */)}
                   type="button"
-                  disabled={orderLoading || items.length === 0}
+                  disabled={orderLoading || items.length === 0 || paymentInitializing}
                   className={`w-full font-bold py-3 rounded-lg transition-all duration-300 disabled:bg-gray-400 ${method.id === 'razorpay' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
                 >
                   {orderLoading ? 'Processing...' : `Continue with ${method.name}`}
