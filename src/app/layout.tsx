@@ -30,11 +30,11 @@ export default function RootLayout({
         id="cashfree-js"
         src="https://sdk.cashfree.com/js/ui/2.0.0/cashfree.sandbox.js"
       />
-      <body className="bg-secondary min-h-screen">
+      <body className="bg-secondary dark:bg-primary-900 min-h-screen">
         <StoreHydration>
           <AuthInitializer />
           {showHeader && <Header />} {/* <-- Conditionally render the Header */}
-          <main className={showHeader ? "container mx-auto" : ""}>
+          <main className={showHeader ? "" : ""}>
             {children}
           </main>
         </StoreHydration>

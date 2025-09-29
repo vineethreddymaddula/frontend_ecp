@@ -19,20 +19,20 @@ export default function ProfileSidebar() {
   ];
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-subtle flex flex-col gap-4">
-      <div className="border-b pb-4 mb-2">
-        <h2 className="font-bold text-lg text-primary">{user?.name}</h2>
-        <p className="text-sm text-gray-500">{user?.email}</p>
+    <div className="bg-white dark:bg-primary-800 mobile-padding sm:p-6 rounded-2xl shadow-subtle flex flex-col gap-4">
+      <div className="border-b border-primary-200 dark:border-primary-600 pb-4 mb-2">
+        <h2 className="font-bold text-base sm:text-lg text-primary-900 dark:text-primary-100">{user?.name}</h2>
+        <p className="text-sm text-primary-500 dark:text-primary-400">{user?.email}</p>
       </div>
       <nav className="space-y-2">
         {navLinks.map(link => {
           const isActive = pathname === link.href;
           return (
             <Link key={link.href} href={link.href}
-              className={`flex items-center gap-3 px-4 py-2 rounded-md font-semibold transition-colors ${
+              className={`flex items-center gap-3 px-3 sm:px-4 py-3 sm:py-2 rounded-xl font-semibold transition-colors btn-touch text-sm sm:text-base ${
                 isActive 
                   ? 'bg-accent text-white' 
-                  : 'text-gray-700 hover:bg-secondary hover:text-primary'
+                  : 'text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-700'
               }`}
             >
               {link.icon}
@@ -42,14 +42,14 @@ export default function ProfileSidebar() {
         })}
         {user?.role === 'admin' && (
           <Link href="/admin"
-            className="flex items-center gap-3 px-4 py-2 rounded-md font-semibold text-gray-700 hover:bg-secondary hover:text-primary transition-colors"
+            className="flex items-center gap-3 px-3 sm:px-4 py-3 sm:py-2 rounded-xl font-semibold text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-700 transition-colors btn-touch text-sm sm:text-base"
           >
             <AdminIcon />
             <span>Admin Dashboard</span>
           </Link>
         )}
       </nav>
-      <button onClick={logoutUser} className="w-full mt-4 bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+      <button onClick={logoutUser} className="w-full mt-4 bg-primary-200 dark:bg-primary-600 text-primary-800 dark:text-primary-200 font-bold py-3 px-4 rounded-xl hover:bg-primary-300 dark:hover:bg-primary-500 transition-colors btn-touch text-sm sm:text-base">
         Logout
       </button>
     </div>

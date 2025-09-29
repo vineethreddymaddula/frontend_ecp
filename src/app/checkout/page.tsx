@@ -142,7 +142,11 @@ export default function CheckoutPage() {
   };
 
   if (authLoading || !user) {
-    return <Spinner />;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900">
+        <LoadingSpinner size="xl" variant="primary" text="Loading checkout..." />
+      </div>
+    );
   }
 
   // Show payment initializing loader
@@ -170,49 +174,55 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-primary tracking-tight">Complete Your Order</h1>
-        <p className="mt-2 text-lg text-gray-600">You&apos;re just a few steps away from your new items.</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12">
-        <div className="lg:col-span-7 bg-white p-8 rounded-lg shadow-subtle space-y-10">
-          <div>
-            <h2 className="text-2xl font-semibold text-primary mb-6 border-b pb-4">Shipping Information</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="sm:col-span-2"><FormInput label="Full Name" id="name" type="text" defaultValue={user.name} required readOnly /></div>
-              <div className="sm:col-span-2"><FormInput label="Email Address" id="email" type="email" defaultValue={user.email} required readOnly /></div>
-              <div className="sm:col-span-2"><FormInput label="Address" id="address" name="address" type="text" placeholder="123 Main St" required onChange={handleAddressChange} value={shippingAddress.address} /></div>
-              <FormInput label="City" id="city" name="city" type="text" placeholder="New York" required onChange={handleAddressChange} value={shippingAddress.city} />
-              <FormInput label="Postal Code" id="postalCode" name="postalCode" type="text" placeholder="10001" required onChange={handleAddressChange} value={shippingAddress.postalCode} />
-            </div>
-          </div>
+    <div className="min-h-screen bg-primary-50 dark:bg-primary-900">
+      <div className="mobile-container py-6 sm:py-8">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-900 dark:text-primary-100 tracking-tight">Complete Your Order</h1>
+          <p className="mt-2 text-base sm:text-lg text-primary-600 dark:text-primary-400">You&apos;re just a few steps away from your new items.</p>
         </div>
 
-        <div className="lg:col-span-5">
-          <div className="bg-white rounded-lg shadow-subtle p-6 sticky top-28">
-            <h2 className="text-2xl font-semibold text-primary mb-6 border-b pb-4">Order Summary</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-              <div className="flex justify-between text-gray-600"><span>Shipping</span><span>$0.00</span></div>
-              <div className="flex justify-between text-gray-600"><span>Tax (8%)</span><span>${taxCost.toFixed(2)}</span></div>
-              <div className="flex justify-between font-bold text-xl text-primary border-t pt-3 mt-3"><span>Total</span><span>${finalTotal.toFixed(2)}</span></div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12">
+          <div className="lg:col-span-7 bg-white dark:bg-primary-800 mobile-padding sm:p-6 lg:p-8 rounded-2xl shadow-subtle space-y-6 sm:space-y-10">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-semibold text-primary-900 dark:text-primary-100 mb-4 sm:mb-6 border-b border-primary-200 dark:border-primary-600 pb-4">Shipping Information</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="sm:col-span-2"><FormInput label="Full Name" id="name" type="text" defaultValue={user.name} required readOnly /></div>
+                <div className="sm:col-span-2"><FormInput label="Email Address" id="email" type="email" defaultValue={user.email} required readOnly /></div>
+                <div className="sm:col-span-2"><FormInput label="Address" id="address" name="address" type="text" placeholder="123 Main St" required onChange={handleAddressChange} value={shippingAddress.address} /></div>
+                <FormInput label="City" id="city" name="city" type="text" placeholder="New York" required onChange={handleAddressChange} value={shippingAddress.city} />
+                <FormInput label="Postal Code" id="postalCode" name="postalCode" type="text" placeholder="10001" required onChange={handleAddressChange} value={shippingAddress.postalCode} />
+              </div>
             </div>
-            {orderError && <p className="text-sm text-red-600 text-center mt-4">{orderError}</p>}
-            <div className="mt-6 border-t pt-6 space-y-4">
-              <h3 className="text-lg font-semibold text-center text-primary">Choose a Payment Method</h3>
-              {availablePaymentMethods.map((method) => (
-                <button
-                  key={method.id}
-                  onClick={() => handlePayment(method.id as 'razorpay' /* | 'cashfree' */)}
-                  type="button"
-                  disabled={orderLoading || items.length === 0 || paymentInitializing}
-                  className={`w-full font-bold py-3 rounded-lg transition-all duration-300 disabled:bg-gray-400 ${method.id === 'razorpay' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
-                >
-                  {orderLoading ? 'Processing...' : `Continue with ${method.name}`}
-                </button>
-              ))}
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="bg-white dark:bg-primary-800 rounded-2xl shadow-subtle mobile-padding sm:p-6 lg:sticky lg:top-28">
+              <h2 className="text-xl sm:text-2xl font-semibold text-primary-900 dark:text-primary-100 mb-4 sm:mb-6 border-b border-primary-200 dark:border-primary-600 pb-4">Order Summary</h2>
+              <div className="space-y-3">
+                <div className="flex justify-between text-primary-600 dark:text-primary-400 text-sm sm:text-base"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between text-primary-600 dark:text-primary-400 text-sm sm:text-base"><span>Shipping</span><span>Free</span></div>
+                <div className="flex justify-between text-primary-600 dark:text-primary-400 text-sm sm:text-base"><span>Tax (8%)</span><span>₹{taxCost.toFixed(2)}</span></div>
+                <div className="flex justify-between font-bold text-lg sm:text-xl text-primary-900 dark:text-primary-100 border-t border-primary-200 dark:border-primary-600 pt-3 mt-3"><span>Total</span><span>₹{finalTotal.toFixed(2)}</span></div>
+              </div>
+              {orderError && <p className="text-sm text-red-600 dark:text-red-400 text-center mt-4">{orderError}</p>}
+              <div className="mt-6 border-t border-primary-200 dark:border-primary-600 pt-6 space-y-3 sm:space-y-4">
+                <h3 className="text-base sm:text-lg font-semibold text-center text-primary-900 dark:text-primary-100">Choose a Payment Method</h3>
+                {availablePaymentMethods.map((method) => (
+                  <button
+                    key={method.id}
+                    onClick={() => handlePayment(method.id as 'razorpay' /* | 'cashfree' */)}
+                    type="button"
+                    disabled={orderLoading || items.length === 0 || paymentInitializing}
+                    className={`w-full font-bold py-3 sm:py-4 rounded-xl transition-all duration-300 disabled:bg-primary-400 dark:disabled:bg-primary-600 disabled:cursor-not-allowed btn-touch text-sm sm:text-base ${
+                      method.id === 'razorpay' 
+                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                        : 'bg-green-600 text-white hover:bg-green-700'
+                    }`}
+                  >
+                    {orderLoading ? 'Processing...' : `Continue with ${method.name}`}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

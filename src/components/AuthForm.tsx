@@ -33,27 +33,27 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-light p-4">
-      <div className="w-full max-w-6xl flex flex-col lg:flex-row bg-white rounded-3xl shadow-premium overflow-hidden animate-scale-in">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-light dark:from-primary-900 dark:via-primary-800 dark:to-primary-700 mobile-container py-4">
+      <div className="w-full max-w-6xl flex flex-col lg:flex-row bg-white dark:bg-primary-800 rounded-2xl sm:rounded-3xl shadow-premium overflow-hidden animate-scale-in">
         {/* Form Section */}
-        <div className="w-full lg:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 mobile-padding sm:p-8 lg:p-12 flex flex-col justify-center">
           <div className="w-full max-w-md mx-auto">
             {/* Logo */}
-            <div className="flex items-center justify-center mb-8">
-              <div className="w-12 h-12 bg-gradient-to-br from-accent to-purple-600 rounded-xl flex items-center justify-center mr-3">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center justify-center mb-6 sm:mb-8">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-accent to-purple-600 rounded-xl flex items-center justify-center mr-3">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </div>
-              <span className="text-3xl font-bold gradient-text">EliteStore</span>
+              <span className="text-2xl sm:text-3xl font-bold gradient-text">E-Store</span>
             </div>
 
-            <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold text-primary-900 mb-3 tracking-tight">{title}</h2>
-              <p className="text-primary-600 text-lg">{subtitle}</p>
+            <div className="text-center mb-6 sm:mb-8">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-900 dark:text-primary-100 mb-2 sm:mb-3 tracking-tight">{title}</h2>
+              <p className="text-primary-600 dark:text-primary-400 text-base sm:text-lg">{subtitle}</p>
             </div>
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
               {!isLogin && (
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -68,7 +68,7 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
                     required 
                     value={formData.name} 
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-4 border-2 border-primary-200 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent text-lg transition-all duration-200 bg-primary-50/50" 
+                    className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 border-2 border-primary-200 dark:border-primary-600 dark:bg-primary-700 dark:text-primary-100 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent text-base sm:text-lg transition-all duration-200 bg-primary-50/50 btn-touch" 
                     placeholder="Full Name" 
                   />
                 </div>
@@ -88,7 +88,7 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
                   required 
                   value={formData.email} 
                   onChange={handleChange}
-                  className="w-full pl-12 pr-4 py-4 border-2 border-primary-200 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent text-lg transition-all duration-200 bg-primary-50/50" 
+                  className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 border-2 border-primary-200 dark:border-primary-600 dark:bg-primary-700 dark:text-primary-100 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent text-base sm:text-lg transition-all duration-200 bg-primary-50/50 btn-touch" 
                   placeholder="Email address" 
                 />
               </div>
@@ -106,14 +106,14 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
                   required 
                   value={formData.password} 
                   onChange={handleChange}
-                  className="w-full pl-12 pr-12 py-4 border-2 border-primary-200 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent text-lg transition-all duration-200 bg-primary-50/50" 
+                  className="w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-4 border-2 border-primary-200 dark:border-primary-600 dark:bg-primary-700 dark:text-primary-100 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent text-base sm:text-lg transition-all duration-200 bg-primary-50/50 btn-touch" 
                   placeholder="Password" 
                 />
                 <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
                   <button 
                     type="button" 
                     onClick={() => setShowPassword(!showPassword)} 
-                    className="text-primary-400 hover:text-primary-600 transition-colors"
+                    className="text-primary-400 dark:text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors btn-touch"
                   >
                     {showPassword ? (
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -130,15 +130,15 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                  <p className="text-red-600 text-center font-medium">{error}</p>
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3 sm:p-4">
+                  <p className="text-red-600 dark:text-red-400 text-center font-medium text-sm sm:text-base">{error}</p>
                 </div>
               )}
 
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-accent to-purple-600 text-white font-bold py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent hover:shadow-premium transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-lg"
+                className="w-full bg-gradient-to-r from-accent to-purple-600 text-white font-bold py-3 sm:py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent hover:shadow-premium transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-base sm:text-lg btn-touch"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -151,16 +151,16 @@ export default function AuthForm({ formType, onSubmit, isLoading, error }: AuthF
               </button>
             </form>
 
-            <div className="text-center mt-8">
+            <div className="text-center mt-6 sm:mt-8">
               {isLogin ? (
-                <p className="text-primary-600">
+                <p className="text-primary-600 dark:text-primary-400 text-sm sm:text-base">
                   Don&apos;t have an account? 
                   <Link href="/register" className="font-semibold text-accent hover:text-purple-600 ml-1 transition-colors">
                     Sign up here
                   </Link>
                 </p>
               ) : (
-                <p className="text-primary-600">
+                <p className="text-primary-600 dark:text-primary-400 text-sm sm:text-base">
                   Already have an account? 
                   <Link href="/login" className="font-semibold text-accent hover:text-purple-600 ml-1 transition-colors">
                     Sign in here

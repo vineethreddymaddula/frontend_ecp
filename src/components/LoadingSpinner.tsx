@@ -21,8 +21,8 @@ const LoadingSpinner = ({
   };
 
   const colorClasses = {
-    primary: 'text-primary-500',
-    secondary: 'text-secondary-500',
+    primary: 'text-primary-500 dark:text-primary-400',
+    secondary: 'text-secondary-500 dark:text-secondary-400',
     white: 'text-white'
   };
 
@@ -54,7 +54,7 @@ const LoadingSpinner = ({
         
         {/* Inner dot */}
         <div className={`absolute inset-0 flex items-center justify-center`}>
-          <div className={`w-2 h-2 ${variant === 'white' ? 'bg-white' : 'bg-primary-500'} rounded-full animate-pulse`} />
+          <div className={`w-2 h-2 ${variant === 'white' ? 'bg-white' : 'bg-primary-500 dark:bg-primary-400'} rounded-full animate-pulse`} />
         </div>
       </div>
       
@@ -68,8 +68,8 @@ const LoadingSpinner = ({
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 animate-scale-in">
+      <div className="fixed inset-0 bg-white/80 dark:bg-primary-900/80 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="bg-white dark:bg-primary-800 rounded-2xl shadow-2xl p-6 sm:p-8 animate-scale-in mx-4">
           {spinner}
         </div>
       </div>
