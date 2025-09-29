@@ -77,7 +77,7 @@ const HeroSection = () => {
 
       {/* Trust Badges */}
       <div className="border-t border-primary-100 bg-white/50 backdrop-blur-sm">
-        <div className="container mx-auto px-6 py-8">
+        <div className="container mx-auto">
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
             <div className="flex items-center space-x-2">
               <svg className="w-6 h-6 text-success" fill="currentColor" viewBox="0 0 20 20">

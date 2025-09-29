@@ -34,7 +34,7 @@ export default function RootLayout({
         <StoreHydration>
           <AuthInitializer />
           {showHeader && <Header />} {/* <-- Conditionally render the Header */}
-          <main className={showHeader ? "container mx-auto px-6 py-8" : ""}>
+          <main className={showHeader ? "container mx-auto" : ""}>
             {children}
           </main>
         </StoreHydration>
