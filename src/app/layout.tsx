@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'; // <-- Import hook
 import './globals.css';
 import Header from '@/components/Header';
+import BottomNavbar from '@/components/BottomNavbar';
 import AuthInitializer from '@/components/AuthInitializer';
 import StoreHydration from '@/components/StoreHydration';
 import Script from 'next/script'
@@ -16,9 +17,10 @@ export default function RootLayout({
 
   const pathname = usePathname(); // <-- Get the current path
 
-  // Define which paths should not have the header
+  // Define which paths should not have the header/navbar
   const noHeaderPaths = ['/login', '/register'];
   const showHeader = !noHeaderPaths.includes(pathname);
+  const showBottomNav = !noHeaderPaths.includes(pathname);
 
   return (
     <html lang="en">
@@ -34,9 +36,10 @@ export default function RootLayout({
         <StoreHydration>
           <AuthInitializer />
           {showHeader && <Header />} {/* <-- Conditionally render the Header */}
-          <main className={showHeader ? "" : ""}>
+          <main className={showBottomNav ? "pb-20" : ""}>
             {children}
           </main>
+          {showBottomNav && <BottomNavbar />} {/* <-- Conditionally render the Bottom Navbar */}
         </StoreHydration>
       </body>
     </html>

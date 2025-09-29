@@ -84,100 +84,13 @@ export default function Header() {
             )}
           </div>
 
-          {/* Mobile Hamburger Menu */}
-          <div className="sm:hidden flex items-center space-x-1">
-            <Link href="/cart" className="relative text-primary-700 dark:text-primary-300 p-2 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-700 transition-colors" title="Cart">
-              <CartIcon />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartCount > 9 ? '9+' : cartCount}
-                </span>
-              )}
-            </Link>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-primary-700 dark:text-primary-300 p-2 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-700 transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+          {/* Mobile Dark Mode Toggle */}
+          <div className="sm:hidden">
+            <DarkModeToggle />
           </div>
         </div>
 
-        {/* Mobile Menu Overlay */}
-        {isMobileMenuOpen && (
-          
-          <div className="sm:hidden fixed inset-0 z-50 " onClick={() => setIsMobileMenuOpen(false)}>
-            <div 
-              ref={mobileMenuRef}
-              className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-white dark:bg-primary-800 shadow-xl transform transition-transform duration-300"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-4 border-b border-primary-200 dark:border-primary-600">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-primary-900 dark:text-primary-100">Menu</span>
-                  <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-primary-700 dark:text-primary-300 hover:text-accent btn-touch p-2"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              
-              <div className="p-4 space-y-4 bg-primary-50 dark:bg-primary-700">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-primary-600 dark:text-primary-400">Theme</span>
-                  <DarkModeToggle />
-                </div>
-                
-                {user ? (
-                  <>
-                    <div className="border-t border-primary-200 dark:border-primary-600 pt-4">
-                      <div className="mb-4">
-                        <p className="text-xs text-primary-500 dark:text-primary-400">Signed in as</p>
-                        <p className="font-semibold text-primary-900 dark:text-primary-100">{user.name}</p>
-                        <p className="text-sm text-primary-600 dark:text-primary-400">{user.email}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-700 rounded-lg transition-colors">
-                        My Profile
-                      </Link>
-                      <Link href="/profile/orders" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-700 rounded-lg transition-colors">
-                        My Orders
-                      </Link>
-                      {user.role === 'admin' && (
-                        <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} className="block px-4 py-3 text-accent font-semibold hover:bg-primary-50 dark:hover:bg-primary-700 rounded-lg transition-colors">
-                          Admin Dashboard
-                        </Link>
-                      )}
-                    </div>
-                    
-                    <div className="border-t border-primary-200 dark:border-primary-600 pt-4">
-                      <button onClick={() => { logoutUser(); setIsMobileMenuOpen(false); }} className="w-full bg-primary-200 dark:bg-primary-600 text-primary-800 dark:text-primary-200 font-bold py-3 px-4 rounded-lg hover:bg-primary-300 dark:hover:bg-primary-500 transition-colors">
-                        Logout
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <div className="border-t border-primary-200 dark:border-primary-600 pt-4 space-y-3">
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center bg-primary-100 dark:bg-primary-700 text-primary-700 dark:text-primary-300 font-bold py-3 px-4 rounded-lg hover:bg-primary-200 dark:hover:bg-primary-600 transition-colors">
-                      Login
-                    </Link>
-                    <Link href="/register" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center bg-accent hover:bg-accent-hover text-white font-bold py-3 px-4 rounded-lg transition-colors">
-                      Register
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+
       </nav>
     </header>
   );

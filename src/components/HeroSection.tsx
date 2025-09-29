@@ -1,8 +1,24 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { useAppStore } from '@/store';
 
 const HeroSection = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const { products } = useAppStore();
+  
+  const featuredProducts = products.slice(0, 3);
+  
+  useEffect(() => {
+    if (featuredProducts.length > 0) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % featuredProducts.length);
+      }, 3000);
+      return () => clearInterval(timer);
+    }
+  }, [featuredProducts.length]);
+  
   return (
     <section className="relative bg-gradient-to-br from-primary-50 via-white to-accent-light dark:from-primary-900 dark:via-primary-800 dark:to-primary-700 overflow-hidden">
       <div className="mobile-container py-6 relative">
@@ -14,6 +30,45 @@ const HeroSection = () => {
           <p className="text-app-sm text-primary-600 dark:text-primary-400 mb-4 leading-relaxed">
             Premium products curated for quality and style
           </p>
+          
+          {/* Product Carousel */}
+          {featuredProducts.length > 0 && (
+            <div className="relative w-full max-w-md mx-auto mb-6">
+              <div className="overflow-hidden rounded-xl">
+                <div 
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                >
+                  {featuredProducts.map((product, index) => (
+                    <div key={product._id} className="w-full flex-shrink-0 relative">
+                      <Link href={`/product/${product._id}`} className="block">
+                        <img 
+                          src={product.images[0] || 'https://images.pexels.com/photos/6604246/pexels-photo-6604246.jpeg'} 
+                          alt={product.name}
+                          className="w-full h-48 object-cover hover:scale-105 transition-transform cursor-pointer"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2">
+                          <p className="text-sm font-medium truncate">{product.name}</p>
+                          <p className="text-xs">₹{product.price}</p>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-center mt-3 space-x-2">
+                {featuredProducts.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      currentSlide === index ? 'bg-accent' : 'bg-primary-300 dark:bg-primary-600'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
           
           <div className="flex gap-3 mb-6 justify-center">
             <Link href="#products" className="bg-accent text-white font-semibold py-2.5 px-5 rounded-lg hover:bg-accent-hover transition-colors btn-touch text-app-sm">

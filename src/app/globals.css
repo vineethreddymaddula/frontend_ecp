@@ -285,3 +285,24 @@ body {
 .text-app-base { font-size: 0.9375rem; }
 .text-app-lg { font-size: 1.0625rem; }
 .text-app-xl { font-size: 1.1875rem; }
+
+/* App container with safe areas */
+.app-container {
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+}
+
+.app-padding {
+  padding: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .app-padding {
+    padding: 1rem;
+  }
+}
+
+/* Safe area for mobile devices */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom);
+}

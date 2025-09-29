@@ -19,17 +19,20 @@ export default function ProfileSidebar() {
   ];
 
   return (
-    <div className="bg-white dark:bg-primary-800 mobile-padding sm:p-6 rounded-2xl shadow-subtle flex flex-col gap-4">
-      <div className="border-b border-primary-200 dark:border-primary-600 pb-4 mb-2">
-        <h2 className="font-bold text-base sm:text-lg text-primary-900 dark:text-primary-100">{user?.name}</h2>
-        <p className="text-sm text-primary-500 dark:text-primary-400">{user?.email}</p>
+    <div className="app-card flex flex-col gap-4">
+      <div className="text-center border-b border-primary-200 dark:border-primary-600 pb-4 mb-2">
+        <div className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold mx-auto mb-2">
+      <img src="https://avatars.githubusercontent.com/u/83410299?s=400&u=40af658436b94777e8ebcb94275907b43a2de4f8&v=4" alt="pic"  />
+        </div>
+        <h2 className="font-bold text-app-sm text-primary-900 dark:text-primary-100">{user?.name}</h2>
+        <p className="text-app-xs text-primary-500 dark:text-primary-400 truncate">{user?.email}</p>
       </div>
       <nav className="space-y-2">
         {navLinks.map(link => {
           const isActive = pathname === link.href;
           return (
             <Link key={link.href} href={link.href}
-              className={`flex items-center gap-3 px-3 sm:px-4 py-3 sm:py-2 rounded-xl font-semibold transition-colors btn-touch text-sm sm:text-base ${
+              className={`flex items-center gap-3 px-3 py-3 rounded-xl font-medium transition-colors btn-touch text-app-xs ${
                 isActive 
                   ? 'bg-accent text-white' 
                   : 'text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-700'
@@ -42,14 +45,14 @@ export default function ProfileSidebar() {
         })}
         {user?.role === 'admin' && (
           <Link href="/admin"
-            className="flex items-center gap-3 px-3 sm:px-4 py-3 sm:py-2 rounded-xl font-semibold text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-700 transition-colors btn-touch text-sm sm:text-base"
+            className="flex items-center gap-3 px-3 py-3 rounded-xl font-medium text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-700 transition-colors btn-touch text-app-xs"
           >
             <AdminIcon />
             <span>Admin Dashboard</span>
           </Link>
         )}
       </nav>
-      <button onClick={logoutUser} className="w-full mt-4 bg-primary-200 dark:bg-primary-600 text-primary-800 dark:text-primary-200 font-bold py-3 px-4 rounded-xl hover:bg-primary-300 dark:hover:bg-primary-500 transition-colors btn-touch text-sm sm:text-base">
+      <button onClick={logoutUser} className="w-full mt-4 bg-primary-200 dark:bg-primary-600 text-primary-800 dark:text-primary-200 font-semibold py-3 px-4 rounded-xl hover:bg-primary-300 dark:hover:bg-primary-500 transition-colors btn-touch text-app-xs">
         Logout
       </button>
     </div>
