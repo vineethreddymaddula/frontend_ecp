@@ -24,6 +24,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      </head>
       <Script
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
@@ -32,7 +35,7 @@ export default function RootLayout({
         id="cashfree-js"
         src="https://sdk.cashfree.com/js/ui/2.0.0/cashfree.sandbox.js"
       />
-      <body className="bg-secondary dark:bg-primary-900 min-h-screen">
+      <body className="bg-secondary dark:bg-primary-900 min-h-screen" style={{touchAction: 'manipulation'}}>
         <StoreHydration>
           <AuthInitializer />
           {showHeader && <Header />} {/* <-- Conditionally render the Header */}
