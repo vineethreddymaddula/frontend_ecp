@@ -34,7 +34,7 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900 mobile-container">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900">
         <LoadingSpinner size="xl" variant="primary" text="Loading product..." />
       </div>
     );
@@ -42,12 +42,12 @@ export default function ProductDetailPage() {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900 mobile-container">
-        <div className="bg-white dark:bg-primary-800 shadow-elegant rounded-2xl mobile-padding text-center max-w-md mx-4">
-          <h2 className="text-xl sm:text-2xl font-bold text-error mb-4">Oops! Something went wrong.</h2>
-          <p className="text-primary-700 dark:text-primary-300 mb-4 text-sm sm:text-base">{error}</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900 app-container">
+        <div className="app-card text-center max-w-md">
+          <h2 className="text-app-lg font-bold text-red-600 dark:text-red-400 mb-3">Something went wrong</h2>
+          <p className="text-primary-600 dark:text-primary-400 mb-4 text-app-sm">{error}</p>
           <button
-            className="bg-gradient-to-r from-accent to-purple-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all duration-200 btn-touch"
+            className="bg-accent text-white px-4 py-2 rounded-lg hover:bg-accent-hover transition-colors text-app-sm font-medium"
             onClick={() => fetchProductById(id)}
           >
             Retry
@@ -59,10 +59,10 @@ export default function ProductDetailPage() {
 
   if (!selectedProduct) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900 mobile-container">
-        <div className="bg-white dark:bg-primary-800 shadow-elegant rounded-2xl mobile-padding text-center max-w-md mx-4">
-          <h2 className="text-xl sm:text-2xl font-bold text-primary-900 dark:text-primary-100 mb-4">Product Not Found</h2>
-          <p className="text-primary-700 dark:text-primary-300 text-sm sm:text-base">We couldn&apos;t find the product you&apos;re looking for.</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900 app-container">
+        <div className="app-card text-center max-w-md">
+          <h2 className="text-app-lg font-bold text-primary-900 dark:text-primary-100 mb-3">Product Not Found</h2>
+          <p className="text-primary-600 dark:text-primary-400 text-app-sm">We couldn&apos;t find the product you&apos;re looking for.</p>
         </div>
       </div>
     );
@@ -196,7 +196,7 @@ export default function ProductDetailPage() {
 
         {/* Features */}
         <div className="app-card">
-          <h3 className="text-app-sm font-semibold text-primary-900 dark:text-primary-100 mb-3">What's Included</h3>
+          <h3 className="text-app-sm font-semibold text-primary-900 dark:text-primary-100 mb-3">What&apos;s Included</h3>
           <div className="grid grid-cols-2 gap-3">
             <div className="flex items-center gap-2">
               <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">

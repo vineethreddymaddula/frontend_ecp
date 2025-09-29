@@ -4,7 +4,7 @@ import React from 'react';
 import { useAppStore } from '@/store';
 import { useRouter } from 'next/navigation';
 import FormInput from '@/components/FormInput';
-import Spinner from '@/components/spinner';
+// import Spinner from '@/components/spinner';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import api from '@/lib/axios';
 import { getAvailablePaymentMethods } from '@/utils/paymentConfig';
