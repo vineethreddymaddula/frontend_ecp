@@ -5,7 +5,7 @@ import { useAppStore } from '@/store';
 import { useRouter } from 'next/navigation';
 import FormInput from '@/components/FormInput';
 // import Spinner from '@/components/spinner';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { CheckoutPageSkeleton } from '@/components/skeletons';
 import api from '@/lib/axios';
 import { getAvailablePaymentMethods } from '@/utils/paymentConfig';
 import Image from 'next/image';
@@ -143,11 +143,7 @@ export default function CheckoutPage() {
   };
 
   if (authLoading || !user) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900">
-        <LoadingSpinner size="xl" variant="primary" text="Loading checkout..." />
-      </div>
-    );
+    return <CheckoutPageSkeleton />;
   }
 
   // Show payment initializing loader

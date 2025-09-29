@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAppStore } from '@/store';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { OrdersPageSkeleton } from '@/components/skeletons';
 import OrderCard from '@/components/OrderCard'; // <-- Import the new component
 import Link from 'next/link';
 
@@ -18,11 +18,7 @@ export default function MyOrdersPage() {
 
   const renderContent = () => {
     if (orderLoading) {
-      return (
-        <div className="flex justify-center py-12">
-          <LoadingSpinner size="lg" variant="primary" text="Loading orders..." />
-        </div>
-      );
+      return <OrdersPageSkeleton />;
     }
     if (orderError) {
       return <p className="text-red-500 dark:text-red-400 text-center py-8 text-sm sm:text-base">{orderError}</p>;

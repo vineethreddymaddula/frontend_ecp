@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { useAppStore } from '@/store';
 import Toast from '@/components/Toast';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { ProductDetailSkeleton } from '@/components/skeletons';
 import { HiShoppingCart } from 'react-icons/hi';
 
 export default function ProductDetailPage() {
@@ -33,11 +33,7 @@ export default function ProductDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900">
-        <LoadingSpinner size="xl" variant="primary" text="Loading product..." />
-      </div>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   if (error) {

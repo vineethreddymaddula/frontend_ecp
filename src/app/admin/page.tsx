@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAppStore } from '@/store';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { AdminPageSkeleton } from '@/components/skeletons';
 import AccessDenied from '@/components/AccessDenied';
 import AdminDashboard from '@/components/AdminDashboard'; // Assuming you have moved the UI here
 
@@ -20,11 +20,7 @@ export default function AdminPage() {
 
   // 1. While the component is mounting on the client, or while the auth state is loading, show a spinner.
   if (!isClient || authLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900">
-        <LoadingSpinner size="xl" variant="primary" text="Loading admin panel..." />
-      </div>
-    );
+    return <AdminPageSkeleton />;
   }
 
   // 2. Once mounted and auth is checked, if there's no user or they aren't an admin, deny access.

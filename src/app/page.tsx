@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useAppStore } from '@/store';
 import HeroSection from '@/components/HeroSection';
 import ProductCard from '@/components/ProductCard';
-import LoadingSpinner from '@/components/LoadingSpinner';
+import { HomePageSkeleton } from '@/components/skeletons';
 
 export default function HomePage() {
 const { products, loading, error, fetchProducts } = useAppStore();
@@ -53,11 +53,7 @@ useEffect(() => {
 }, [fetchProducts]);
 
 if (loading) {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-primary-50 dark:bg-primary-900 mobile-container">
-      <LoadingSpinner size="lg" variant="primary" text="Loading products..." />
-    </div>
-  );
+  return <HomePageSkeleton />;
 }
 
 if (error) {
